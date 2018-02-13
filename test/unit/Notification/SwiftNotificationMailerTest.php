@@ -187,7 +187,9 @@ class SpyingSwiftMailer extends \Swift_Mailer
 
 class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
 {
-    public function message($file, $path, array $params = [])
+    public function __construct() { }
+
+    public function message($file, $path, array $params = [], $default = NULL)
     {
         return json_encode(
             [
