@@ -7,7 +7,7 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\Notification;
 
 
-use Ingenerator\KohanaWrapper\KohanaMessageProvider;
+use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;

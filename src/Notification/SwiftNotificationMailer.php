@@ -7,7 +7,7 @@
 namespace Ingenerator\Warden\UI\Kohana\Notification;
 
 
-use Ingenerator\KohanaWrapper\KohanaMessageProvider;
+use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;
 use Ingenerator\Warden\Core\Notification\UserNotificationMailer;
@@ -26,7 +26,7 @@ class SwiftNotificationMailer implements UserNotificationMailer
     protected $email_config;
 
     /**
-     * @var KohanaMessageProvider
+     * @var \Ingenerator\KohanaExtras\Message\KohanaMessageProvider
      */
     protected $messages;
 
