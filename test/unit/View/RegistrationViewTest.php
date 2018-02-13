@@ -24,7 +24,7 @@ class RegistrationViewTest extends AbstractFormViewTest
 
     /**
      * @testWith ["122412323", "readonly"]
-     *           ["", FALSE]
+     *           ["", false]
      */
     public function test_it_makes_email_readonly_if_confirmation_token_is_provided($token, $expect_readonly)
     {
