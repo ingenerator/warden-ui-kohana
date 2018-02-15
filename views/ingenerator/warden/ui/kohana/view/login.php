@@ -16,7 +16,7 @@ use Ingenerator\Warden\UI\Kohana\View\LoginView;
             type="email"
             name="email"
             id="input-email"
-            value="<?=$view->email;?>"
+            value="<?= $view->fields['email']['value']; ?>"
             required>
     </div>
     <div class="form-group">

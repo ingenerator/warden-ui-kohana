@@ -18,7 +18,7 @@ use Ingenerator\Warden\UI\Kohana\View\PasswordResetView;
         type="email"
         name="email"
         id="input-email"
-        value="<?= $view->email; ?>"
+        value="<?= $view->fields['email']['value']; ?>"
         readonly
         required>
   </div>
