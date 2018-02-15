@@ -8,6 +8,7 @@ use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
  * @var Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
  */
 ?>
+<h1 class="page-title">Register</h1>
 <form method="post">
   <div class="form-group">
     <label for="input-email" class="control-label">Email</label>

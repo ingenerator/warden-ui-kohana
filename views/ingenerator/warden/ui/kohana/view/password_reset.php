@@ -9,7 +9,7 @@
 use Ingenerator\Warden\UI\Kohana\View\PasswordResetView;
 
 ?>
-<h4>Change Password</h4>
+<h1 class="page-title">Password Reset</h1>
 <form method="post">
   <div class="form-group">
     <label for="input-email" class="control-label">Email</label>

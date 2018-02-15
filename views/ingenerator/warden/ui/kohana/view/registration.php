@@ -8,6 +8,7 @@ use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
  * @var Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
  */
 ?>
+<h1 class="page-title">Register</h1>
 <form method="post">
     <input type="hidden" name="email_confirmation_token" value="<?= $view->fields['email_confirmation_token']['value']; ?>">
     <div class="form-group">
