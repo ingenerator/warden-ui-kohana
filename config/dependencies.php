@@ -170,6 +170,16 @@ return [
                     ],
                 ],
             ],
+            'profile' => [
+                'profile' => [
+                    '_settings' => [
+                        'class'     => Ingenerator\Warden\UI\Kohana\View\ProfileView::class,
+                        'arguments' => [
+                            '%view.layout.default%',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
 ];
