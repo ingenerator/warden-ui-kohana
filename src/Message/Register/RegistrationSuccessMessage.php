@@ -15,7 +15,7 @@ class RegistrationSuccessMessage extends Message
     {
         parent::__construct(
             'Registration Successful',
-            'You have successfully created an account. You can now create an API key below.',
+            'You have successfully created an account.',
             Message::SUCCESS
         );
     }

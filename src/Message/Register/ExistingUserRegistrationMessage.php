@@ -15,7 +15,7 @@ class ExistingUserRegistrationMessage extends Message
     {
         parent::__construct(
             'You\'re already registered',
-            "You already have an account as $email - please login below.",
+            "$email is already registered - please login below.",
             Message::WARNING
         );
     }
