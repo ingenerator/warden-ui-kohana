@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Bump kohana-extras to 0.3 and to use our ingenerator kohana-core fork
+
 ### v0.2.0 (2018-02-20)
 
 * Bump kohana-extras dependency to 0.2
