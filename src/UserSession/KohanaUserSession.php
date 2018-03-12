@@ -34,6 +34,7 @@ class KohanaUserSession extends SimplePropertyUserSession
     public function login(User $user)
     {
         parent::login($user);
+        $this->session_driver->regenerate();
         $this->session_driver->set('user_id', $user->getId());
     }
 
@@ -44,6 +45,7 @@ class KohanaUserSession extends SimplePropertyUserSession
     {
         parent::logout();
         $this->session_driver->delete('user_id');
+        $this->session_driver->regenerate();
     }
 
     /**
