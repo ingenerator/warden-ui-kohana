@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Require the inGenerator fork of Kohana
+
 ### v0.2.1 (2018-03-12)
 
 * Regenerate session ID on login / logout 
