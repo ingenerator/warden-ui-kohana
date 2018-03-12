@@ -47,6 +47,22 @@ class KohanaUserSessionTest extends UserSessionTest
         $this->assertNull($this->session_driver->get('user_id'));
     }
 
+    public function test_it_regenerates_session_id_on_login()
+    {
+        $old_sid = $this->session_driver->id();
+        $this->newSubject()->login(UserStub::withId(159));
+        $new_sid = $this->session_driver->id();
+        $this->assertNotEquals($old_sid, $new_sid);
+    }
+
+    public function test_it_regenerates_session_id_on_logout()
+    {
+        $old_sid = $this->session_driver->id();
+        $this->newSubject()->login(UserStub::withId(159));
+        $new_sid = $this->session_driver->id();
+        $this->assertNotEquals($old_sid, $new_sid);
+    }
+
     public function test_it_is_authenticated_when_user_id_is_set_in_session()
     {
         $this->session_driver->set('user_id', 198);
