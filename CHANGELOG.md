@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Split all actions to individual controllers - these will now need to be routed as HTTPMethodRoutes for each one,
+  and reverse routing may well need to change
 * Require the inGenerator fork of Kohana
 
 ### v0.2.1 (2018-03-12)

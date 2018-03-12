@@ -29,6 +29,16 @@ abstract class WardenBaseController extends \Controller
     }
 
     /**
+     * @param string $service
+     *
+     * @return object
+     */
+    protected function getService($service)
+    {
+        return $this->dependencies->get($service);
+    }
+
+    /**
      * @return LoginInteractor
      */
     protected function getInteractorLogin()
@@ -44,20 +54,39 @@ abstract class WardenBaseController extends \Controller
         return $this->getService('warden.interactor.password_reset');
     }
 
-    protected function makeInteractorRequest($type, $factory_method, $argument)
-    {
-        $factory = $this->getService('warden.support.interactor_request_factory');
-
-        /** @var InteractorRequestFactory $factory */
-        return $factory->make($type, $factory_method, $argument);
-    }
-
     /**
      * @return UserRegistrationInteractor
      */
     protected function getInteractorUserRegistration()
     {
         return $this->getService('warden.interactor.user_registration');
+    }
+
+    /**
+     * @return UrlProvider
+     */
+    protected function getUrlProvider()
+    {
+        return $this->getService('warden.support.url_provider');
+    }
+
+    /**
+     * @return UserSession
+     */
+    protected function getUserSession()
+    {
+        return $this->getService('warden.user_session.session');
+    }
+
+    /**
+     * @param string $email
+     */
+    protected function handleRegisterAttemptForExistingUser($email)
+    {
+        $this->getPigeonhole()->add(new ExistingUserRegistrationMessage($email));
+        //@todo: make login url customisable
+        $url = '/login?'.http_build_query(['email' => $email]);
+        $this->redirect($url);
     }
 
     /**
@@ -68,30 +97,13 @@ abstract class WardenBaseController extends \Controller
         return $this->getService('pigeonhole');
     }
 
-    /**
-     * @param string $service
-     *
-     * @return object
-     */
-    protected function getService($service)
+    protected function makeInteractorRequest($type, $factory_method, $argument)
     {
-        return $this->dependencies->get($service);
+        $factory = $this->getService('warden.support.interactor_request_factory');
+
+        /** @var InteractorRequestFactory $factory */
+        return $factory->make($type, $factory_method, $argument);
     }
 
-    /**
-     * @return UrlProvider
-     */
-    protected function getUrlProvider()
-    {
-        return $this->getService('warden.support.url_provider');
-    }
-    
-    /**
-     * @return UserSession
-     */
-    protected function getUserSession()
-    {
-        return $this->getService('warden.user_session.session');
-    }
 
 }
