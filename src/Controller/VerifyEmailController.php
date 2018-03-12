@@ -7,18 +7,55 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
-use Ingenerator\Pigeonhole\Message;
+use Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationResponse;
+use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
+use Ingenerator\Warden\Core\Support\UrlProvider;
+use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Register\EmailVerificationSentMessage;
 use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
 
 class VerifyEmailController extends WardenBaseController
 {
+    /**
+     * @var EmailVerificationInteractor
+     */
+    protected $email_interactor;
+
+    /**
+     * @var UserSession
+     */
+    protected $session;
+
+    /**
+     * @var UrlProvider
+     */
+    protected $urls;
+
+    /**
+     * @var EmailVerificationView
+     */
+    protected $verify_view;
+
+    public function __construct(
+        InteractorRequestFactory $rq_factory,
+        EmailVerificationInteractor $email_interactor,
+        EmailVerificationView $verify_view,
+        UrlProvider $urls,
+        UserSession $session
+    ) {
+        parent::__construct($rq_factory);
+        $this->urls             = $urls;
+        $this->session          = $session;
+        $this->email_interactor = $email_interactor;
+        $this->verify_view      = $verify_view;
+    }
+
     public function before()
     {
         parent::before();
-        if ($this->getUserSession()->isAuthenticated()) {
+        if ($this->session->isAuthenticated()) {
             $this->redirect('/profile');
         }
     }
@@ -30,22 +67,19 @@ class VerifyEmailController extends WardenBaseController
 
     protected function displayEmailVerificationForm(Fieldset $fieldset)
     {
-        $view = $this->getService('warden.view.registration.email_verification');
-        /** @var EmailVerificationView $view */
-        $view->display(['fields' => $fieldset]);
-        $this->respondPageContent($view);
+        $this->verify_view->display(['fields' => $fieldset]);
+        $this->respondPageContent($this->verify_view);
     }
 
     public function action_post()
     {
-        $result = $this->getInteractorEmailVerification()
-            ->execute(
-                $this->makeInteractorRequest(
-                    'email_verification',
-                    'forRegistration',
-                    $this->request->post('email')
-                )
-            );
+        $result = $this->email_interactor->execute(
+            $this->makeInteractorRequest(
+                'email_verification',
+                'forRegistration',
+                $this->request->post('email')
+            )
+        );
 
         if ($result->wasSuccessful()) {
             $this->handleEmailVerificationSent($result);

@@ -6,23 +6,48 @@
 
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
-use Ingenerator\Pigeonhole\Message;
 use Ingenerator\Warden\Core\Entity\User;
-use Ingenerator\Warden\Core\Interactor\EmailVerificationResponse;
+use Ingenerator\Warden\Core\Interactor\UserRegistrationInteractor;
 use Ingenerator\Warden\Core\Interactor\UserRegistrationResponse;
+use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
+use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
-use Ingenerator\Warden\UI\Kohana\Message\Register\EmailVerificationSentMessage;
-use Ingenerator\Warden\UI\Kohana\Message\Register\ExistingUserRegistrationMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Register\RegistrationSuccessMessage;
-use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
 use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
 
 class RegisterController extends WardenBaseController
 {
+    /**
+     * @var UserRegistrationInteractor
+     */
+    protected $register_interactor;
+
+    /**
+     * @var RegistrationView
+     */
+    protected $register_view;
+
+    /**
+     * @var UserSession
+     */
+    protected $session;
+
+    public function __construct(
+        InteractorRequestFactory $rq_factory,
+        UserRegistrationInteractor $register_interactor,
+        RegistrationView $register_view,
+        UserSession $session
+    ) {
+        parent::__construct($rq_factory);
+        $this->register_interactor = $register_interactor;
+        $this->register_view       = $register_view;
+        $this->session             = $session;
+    }
+
     public function before()
     {
         parent::before();
-        if ($this->getUserSession()->isAuthenticated()) {
+        if ($this->session->isAuthenticated()) {
             $this->redirect('/profile');
         }
 
@@ -44,23 +69,20 @@ class RegisterController extends WardenBaseController
 
     protected function displayRegistrationForm(Fieldset $fieldset)
     {
-        $view = $this->getService('warden.view.registration.registration');
-        /** @var RegistrationView $view */
-        $view->display(['fields' => $fieldset]);
+        $this->register_view->display(['fields' => $fieldset]);
 
-        $this->respondPageContent($view);
+        $this->respondPageContent($this->register_view);
     }
 
     public function action_post()
     {
-        $result = $this->getInteractorUserRegistration()
-            ->execute(
-                $this->makeInteractorRequest(
-                    'user_registration',
-                    'fromArray',
-                    $this->request->post()
-                )
-            );
+        $result = $this->register_interactor->execute(
+            $this->makeInteractorRequest(
+                'user_registration',
+                'fromArray',
+                $this->request->post()
+            )
+        );
 
         if ($result->wasSuccessful()) {
             $user = $result->getUser();
@@ -85,7 +107,7 @@ class RegisterController extends WardenBaseController
 
     protected function handleActiveUserRegistration(User $user)
     {
-        if ( ! $this->getUserSession()->isAuthenticated()) {
+        if ( ! $this->session->isAuthenticated()) {
             throw new \UnexpectedValueException('Active user was not authenticated after registration');
         }
 

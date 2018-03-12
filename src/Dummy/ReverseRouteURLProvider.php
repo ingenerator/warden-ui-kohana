@@ -11,12 +11,12 @@ class ReverseRouteURLProvider implements UrlProvider
 {
     public function getLoginUrl()
     {
-        return \URL::site(\Route::url('default', ['controller' => 'login', 'action' => 'index']));
+        return \URL::site(\Route::url('warden-login'));
     }
 
     public function getRegistrationUrl()
     {
-        return \URL::site(\Route::url('default', ['controller' => 'register', 'action' => 'index']));
+        return \URL::site(\Route::url('warden-register'));
     }
 
 }
