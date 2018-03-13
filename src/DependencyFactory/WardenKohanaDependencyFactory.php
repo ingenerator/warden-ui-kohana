@@ -126,7 +126,8 @@ class WardenKohanaDependencyFactory
                     ],
                     'url_provider'               => [
                         '_settings' => [
-                            'class' => \Ingenerator\Warden\UI\Kohana\Dummy\ReverseRouteURLProvider::class,
+                            'class'     => \Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter::class,
+                            'arguments' => ['@warden.url_routing@'],
                         ],
                     ],
                 ],

@@ -12,7 +12,6 @@ use Ingenerator\Warden\Core\Interactor\LoginResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
-use Ingenerator\Warden\UI\Kohana\Dummy\ReverseRouteURLProvider;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
