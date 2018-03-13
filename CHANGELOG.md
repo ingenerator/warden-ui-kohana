@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Provide WardenKohanaDependencyFactory::definitions and ::controllerDefinitions
 * Now officially requires ingenerator/tokenista as the default token-generating service
 * Split all actions to individual controllers - these will now need to be routed as HTTPMethodRoutes for each one,
   and reverse routing may well need to change
