@@ -12,6 +12,7 @@ use Ingenerator\Warden\Core\Interactor\LoginResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
+use Ingenerator\Warden\UI\Kohana\Dummy\ReverseRouteURLProvider;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
@@ -57,7 +58,7 @@ class LoginController extends WardenBaseController
     {
         parent::before();
         if ($this->user_session->isAuthenticated()) {
-            $this->redirect('/profile');
+            $this->redirect($this->urls->getDefaultUserHomeUrl($this->user_session->getUser()));
         }
     }
 
@@ -79,8 +80,8 @@ class LoginController extends WardenBaseController
         );
 
         if ($result->wasSuccessful()) {
-            // @todo: Make the login success url customisable
-            $this->redirect('/profile');
+            $this->redirect($this->urls->getAfterLoginUrl($result->getUser()));
+
         } else {
             $this->handleLoginFailure($result);
         }
@@ -110,10 +111,7 @@ class LoginController extends WardenBaseController
     protected function handleLoginNotRegistered(LoginResponse $result)
     {
         $this->getPigeonhole()->add(new UnregisteredUserMessage($result->getEmail()));
-        $registration_url = $this->urls->getRegistrationUrl();
-        $this->redirect(
-            $registration_url.'?'.http_build_query(['email' => $result->getEmail()])
-        );
+        $this->redirect($this->urls->getRegisterVerifyEmailUrl($result->getEmail()));
     }
 
     protected function handleLoginInvalidPassword(LoginResponse $result)

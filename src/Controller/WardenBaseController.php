@@ -9,6 +9,7 @@ namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 use Ingenerator\Pigeonhole\Pigeonhole;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
+use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\UI\Kohana\Message\Register\ExistingUserRegistrationMessage;
 
 abstract class WardenBaseController extends \Controller
@@ -21,18 +22,17 @@ abstract class WardenBaseController extends \Controller
 
     public function __construct(InteractorRequestFactory $rq_factory)
     {
+        parent::__construct();
         $this->rq_factory = $rq_factory;
     }
 
     /**
      * @param string $email
      */
-    protected function handleRegisterAttemptForExistingUser($email)
+    protected function handleRegisterAttemptForExistingUser(UrlProvider $urls, $email)
     {
         $this->getPigeonhole()->add(new ExistingUserRegistrationMessage($email));
-        //@todo: make login url customisable
-        $url = '/login?'.http_build_query(['email' => $email]);
-        $this->redirect($url);
+        $this->redirect($urls->getLoginUrl($email));
     }
 
     /**

@@ -57,12 +57,13 @@ class ResetPasswordController extends WardenBaseController
     {
         parent::before();
         if ($this->session->isAuthenticated()) {
-            $this->redirect('/profile');
+            $this->redirect($this->urls->getDefaultUserHomeUrl($this->session->getUser()));
         }
     }
 
     public function action_get()
     {
+        // @todo: If there is no token or it's not valid we should just bork straight away!
         $this->displayPasswordResetForm(new Fieldset(['email' => $this->request->query('email')], []));
     }
 
@@ -94,17 +95,15 @@ class ResetPasswordController extends WardenBaseController
     protected function handlePasswordResetSuccess(PasswordResetResponse $result)
     {
         $this->getPigeonhole()->add(new PasswordResetSuccessMessage($result->getEmail()));
-        // @todo: Make the login success url customisable
-        $this->redirect('/profile');
+        $this->redirect($this->urls->getAfterLoginUrl($this->session->getUser()));
     }
 
     protected function handlePasswordResetFailure(PasswordResetResponse $result)
     {
         if ($result->isFailureCode(PasswordResetResponse::ERROR_TOKEN_INVALID)) {
             $this->getPigeonhole()->add(new InvalidPasswordResetLinkMessage);
-            $this->redirect(
-                $this->urls->getLoginUrl().'?'.http_build_query(['email' => $result->getEmail()])
-            );
+            $this->redirect($this->urls->getLoginUrl($result->getEmail()));
+
         } elseif ($result->isFailureCode(PasswordResetResponse::ERROR_DETAILS_INVALID)) {
             $this->displayPasswordResetForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
 

@@ -8,6 +8,7 @@ namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
+use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 
@@ -24,18 +25,28 @@ class ProfileController extends WardenBaseController
      */
     protected $session;
 
-    public function __construct(InteractorRequestFactory $rq_factory, ProfileView $profile_view, UserSession $session)
-    {
+    /**
+     * @var UrlProvider
+     */
+    protected $urls;
+
+    public function __construct(
+        InteractorRequestFactory $rq_factory,
+        UrlProvider $urls,
+        ProfileView $profile_view,
+        UserSession $session
+    ) {
         parent::__construct($rq_factory);
         $this->profile_view = $profile_view;
         $this->session      = $session;
+        $this->urls         = $urls;
     }
 
     public function before()
     {
         parent::before();
         if ( ! $this->session->isAuthenticated()) {
-            $this->redirect('/login');
+            $this->redirect($this->urls->getLoginUrl());
         }
     }
 

@@ -10,6 +10,7 @@ use Ingenerator\Warden\Core\Entity\User;
 use Ingenerator\Warden\Core\Interactor\UserRegistrationInteractor;
 use Ingenerator\Warden\Core\Interactor\UserRegistrationResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
+use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Register\RegistrationSuccessMessage;
@@ -31,9 +32,14 @@ class RegisterController extends WardenBaseController
      * @var UserSession
      */
     protected $session;
+    /**
+     * @var UrlProvider
+     */
+    private $urls;
 
     public function __construct(
         InteractorRequestFactory $rq_factory,
+        UrlProvider $urls,
         UserRegistrationInteractor $register_interactor,
         RegistrationView $register_view,
         UserSession $session
@@ -42,19 +48,19 @@ class RegisterController extends WardenBaseController
         $this->register_interactor = $register_interactor;
         $this->register_view       = $register_view;
         $this->session             = $session;
+        $this->urls = $urls;
     }
 
     public function before()
     {
         parent::before();
         if ($this->session->isAuthenticated()) {
-            $this->redirect('/profile');
+            $this->redirect($this->urls->getDefaultUserHomeUrl($this->session->getUser()));
         }
 
         // if configured to require email confirm before registration and there is no token param
         if ( ! $this->request->query('token')) {
-            // @todo: configure the verify email route
-            $this->redirect('/register/verify-email?'.http_build_query(['email' => $this->request->query('email')]));
+            $this->redirect($this->urls->getRegisterVerifyEmailUrl($this->request->query('email')));
         }
     }
 
@@ -112,14 +118,13 @@ class RegisterController extends WardenBaseController
         }
 
         $this->getPigeonhole()->add(new RegistrationSuccessMessage());
-        // @todo: Make the registration success url customisable
-        $this->redirect('/profile');
+        $this->redirect($this->urls->getAfterLoginUrl($user));
     }
 
     protected function handleRegistrationFailed(UserRegistrationResponse $result)
     {
         if ($result->isFailureCode(UserRegistrationResponse::ERROR_ALREADY_REGISTERED)) {
-            $this->handleRegisterAttemptForExistingUser($result->getEmail());
+            $this->handleRegisterAttemptForExistingUser($this->urls, $result->getEmail());
 
         } elseif ($result->isFailureCode(UserRegistrationResponse::ERROR_DETAILS_INVALID)) {
             $this->displayRegistrationForm(new Fieldset($this->request->post(), $result->getValidationErrors()));

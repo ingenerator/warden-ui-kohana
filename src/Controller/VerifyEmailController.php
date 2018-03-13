@@ -56,7 +56,7 @@ class VerifyEmailController extends WardenBaseController
     {
         parent::before();
         if ($this->session->isAuthenticated()) {
-            $this->redirect('/profile');
+            $this->redirect($this->urls->getDefaultUserHomeUrl($this->session->getUser()));
         }
     }
 
@@ -91,14 +91,13 @@ class VerifyEmailController extends WardenBaseController
     protected function handleEmailVerificationSent(EmailVerificationResponse $result)
     {
         $this->getPigeonhole()->add(new EmailVerificationSentMessage($result->getEmail()));
-        //@todo: make the email-verification url customisable
-        $this->redirect('/');
+        $this->redirect($this->urls->getAfterVerifyEmailSentUrl());
     }
 
     protected function handleEmailVerificationFailed(EmailVerificationResponse $result)
     {
         if ($result->isFailureCode(EmailVerificationResponse::ERROR_ALREADY_REGISTERED)) {
-            $this->handleRegisterAttemptForExistingUser($result->getEmail());
+            $this->handleRegisterAttemptForExistingUser($this->urls, $result->getEmail());
         } elseif ($result->isFailureCode(EmailVerificationResponse::ERROR_DETAILS_INVALID)) {
             $this->displayEmailVerificationForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
         } else {
