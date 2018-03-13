@@ -56,9 +56,7 @@ class ResetPasswordController extends WardenBaseController
     public function before()
     {
         parent::before();
-        if ($this->session->isAuthenticated()) {
-            $this->redirect($this->urls->getDefaultUserHomeUrl($this->session->getUser()));
-        }
+        $this->redirectHomeIfLoggedIn($this->session, $this->urls);
     }
 
     public function action_get()

@@ -54,9 +54,7 @@ class RegisterController extends WardenBaseController
     public function before()
     {
         parent::before();
-        if ($this->session->isAuthenticated()) {
-            $this->redirect($this->urls->getDefaultUserHomeUrl($this->session->getUser()));
-        }
+        $this->redirectHomeIfLoggedIn($this->session, $this->urls);
 
         // if configured to require email confirm before registration and there is no token param
         if ( ! $this->request->query('token')) {

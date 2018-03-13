@@ -57,9 +57,7 @@ class LoginController extends WardenBaseController
     public function before()
     {
         parent::before();
-        if ($this->user_session->isAuthenticated()) {
-            $this->redirect($this->urls->getDefaultUserHomeUrl($this->user_session->getUser()));
-        }
+        $this->redirectHomeIfLoggedIn($this->user_session, $this->urls);
     }
 
     public function action_get()

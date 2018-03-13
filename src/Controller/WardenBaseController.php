@@ -10,6 +10,7 @@ namespace Ingenerator\Warden\UI\Kohana\Controller;
 use Ingenerator\Pigeonhole\Pigeonhole;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
+use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Message\Register\ExistingUserRegistrationMessage;
 
 abstract class WardenBaseController extends \Controller
@@ -33,6 +34,17 @@ abstract class WardenBaseController extends \Controller
     {
         $this->getPigeonhole()->add(new ExistingUserRegistrationMessage($email));
         $this->redirect($urls->getLoginUrl($email));
+    }
+
+    /**
+     * @param UserSession $session
+     * @param UrlProvider $urls
+     */
+    protected function redirectHomeIfLoggedIn(UserSession $session, UrlProvider $urls)
+    {
+        if ($session->isAuthenticated()) {
+            $this->redirect($urls->getDefaultUserHomeUrl($session->getUser()));
+        }
     }
 
     /**
