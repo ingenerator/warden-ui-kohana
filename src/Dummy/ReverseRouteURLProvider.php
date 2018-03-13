@@ -26,6 +26,11 @@ class ReverseRouteURLProvider implements UrlProvider
         return $this->getLoginUrl();
     }
 
+    public function getLogoutUrl()
+    {
+        return \Route::url('warden-logout');
+    }
+
     public function getLoginUrl($email = NULL)
     {
         $url = \URL::site(\Route::url('warden-login'));
