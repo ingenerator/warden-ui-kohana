@@ -7,57 +7,44 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
-use Ingenerator\Pigeonhole\Message;
 use Ingenerator\Pigeonhole\Pigeonhole;
-use Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor;
-use Ingenerator\Warden\Core\Interactor\LoginInteractor;
-use Ingenerator\Warden\Core\Interactor\PasswordResetInteractor;
-use Ingenerator\Warden\Core\Interactor\UserRegistrationInteractor;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
+use Ingenerator\Warden\UI\Kohana\Message\Register\ExistingUserRegistrationMessage;
 
 abstract class WardenBaseController extends \Controller
 {
 
     /**
-     * @return EmailVerificationInteractor
+     * @var InteractorRequestFactory
      */
-    protected function getInteractorEmailVerification()
+    protected $rq_factory;
+
+    public function __construct(InteractorRequestFactory $rq_factory)
     {
-        return $this->getService('warden.interactor.email_verification');
+        parent::__construct();
+        $this->rq_factory = $rq_factory;
     }
 
     /**
-     * @return LoginInteractor
+     * @param string $email
      */
-    protected function getInteractorLogin()
+    protected function handleRegisterAttemptForExistingUser(UrlProvider $urls, $email)
     {
-        return $this->getService('warden.interactor.login');
+        $this->getPigeonhole()->add(new ExistingUserRegistrationMessage($email));
+        $this->redirect($urls->getLoginUrl($email));
     }
 
     /**
-     * @return PasswordResetInteractor
+     * @param UserSession $session
+     * @param UrlProvider $urls
      */
-    protected function getInteractorPasswordReset()
+    protected function redirectHomeIfLoggedIn(UserSession $session, UrlProvider $urls)
     {
-        return $this->getService('warden.interactor.password_reset');
-    }
-
-    protected function makeInteractorRequest($type, $factory_method, $argument)
-    {
-        $factory = $this->getService('warden.support.interactor_request_factory');
-
-        /** @var InteractorRequestFactory $factory */
-        return $factory->make($type, $factory_method, $argument);
-    }
-
-    /**
-     * @return UserRegistrationInteractor
-     */
-    protected function getInteractorUserRegistration()
-    {
-        return $this->getService('warden.interactor.user_registration');
+        if ($session->isAuthenticated()) {
+            $this->redirect($urls->getDefaultUserHomeUrl($session->getUser()));
+        }
     }
 
     /**
@@ -78,20 +65,10 @@ abstract class WardenBaseController extends \Controller
         return $this->dependencies->get($service);
     }
 
-    /**
-     * @return UrlProvider
-     */
-    protected function getUrlProvider()
+
+    protected function makeInteractorRequest($type, $factory_method, $argument)
     {
-        return $this->getService('warden.support.url_provider');
-    }
-    
-    /**
-     * @return UserSession
-     */
-    protected function getUserSession()
-    {
-        return $this->getService('warden.user_session.session');
+        return $this->rq_factory->make($type, $factory_method, $argument);
     }
 
 }
