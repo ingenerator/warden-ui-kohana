@@ -77,7 +77,7 @@ class WardenConfigBasedRouterTest extends \PHPUnit_Framework_TestCase
         $this->config[$key]['url'] = '/shiny-page';
         $subject                   = $this->newSubject();
         $result                    = call_user_func_array([$subject, $method], $args);
-        $this->assertEquals(\Url::site($expect), $result);
+        $this->assertEquals(\URL::site($expect), $result);
     }
 
     public function provider_url_routing()

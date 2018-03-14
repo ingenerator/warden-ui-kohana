@@ -101,7 +101,7 @@ class WardenConfigBasedRouter implements UrlProvider
             throw new \OutOfBoundsException('Unexpected access to empty URL `'.$key.'`');
         }
 
-        $base_url = \Url::site($this->url_config[$key]['url']);
+        $base_url = \URL::site($this->url_config[$key]['url']);
         if ($params) {
             return $base_url.'?'.http_build_query($params);
         } else {
