@@ -3,7 +3,7 @@ auth / management library.
 
 **Warden is under heavy development and not recommended for production use outwith inGenerator.**
 
-[![Build Status](https://travis-ci.org/ingenerator/warden-ui-kohana.svg?branch=0.2.x)](https://travis-ci.org/ingenerator/warden-ui-kohana)
+[![Build Status](https://travis-ci.org/ingenerator/warden-ui-kohana.svg?branch=0.3.x)](https://travis-ci.org/ingenerator/warden-ui-kohana)
 
 
 # Installing warden-ui-kohana

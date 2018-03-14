@@ -1,5 +1,7 @@
 ### Unreleased
 
+### v0.3.0 (2018-03-14)
+
 * Implement a flexible config-based UrlProvider that is both able to generate URLs for
   the most common cases Warden needs them, and to define the application routing to map 
   those back to controllers.
