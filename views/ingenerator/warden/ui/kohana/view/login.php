@@ -9,7 +9,7 @@ use Ingenerator\Warden\UI\Kohana\View\LoginView;
  */
 ?>
 <h1 class="page-title">Login</h1>
-<form method="post">
+<form method="post" action="<?=$view->login_url;?>">
     <div class="form-group">
         <label for="input-email" class="control-label">Email</label>
         <input

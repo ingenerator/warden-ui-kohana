@@ -159,6 +159,7 @@ class WardenKohanaDependencyFactory
                                 'class'     => \Ingenerator\Warden\UI\Kohana\View\LoginView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
+                                    '%warden.support.url_provider%',
                                 ],
                             ],
                         ],
