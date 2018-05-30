@@ -10,6 +10,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use Ingenerator\Warden\Core\Support\FixedUrlProviderStub;
 
 class LoginViewTest extends AbstractFormViewTest
 {
@@ -23,7 +24,7 @@ class LoginViewTest extends AbstractFormViewTest
     
     protected function newSubject()
     {
-        return new LoginView(new DummyPageLayoutView);
+        return new LoginView(new DummyPageLayoutView, new FixedUrlProviderStub());
     }
 
 }

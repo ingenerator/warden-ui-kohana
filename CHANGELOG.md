@@ -1,5 +1,10 @@
 ### Unreleased
 
+### v0.3.1 (2018-05-30)
+
+* Login form provides submission URL in action param to enable the form to be 
+  embedded on different pages
+
 ### v0.3.0 (2018-03-14)
 
 * Implement a flexible config-based UrlProvider that is both able to generate URLs for
