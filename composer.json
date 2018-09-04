@@ -12,7 +12,7 @@
     }
   ],
   "require": {
-    "php": "^5.5",
+    "php": "^5.5||^7.2",
     "symfony/validator": "^3.0",
     "ingenerator/warden-core": "^0.2",
     "ingenerator/warden-validator-symfony": "^0.1",

@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v0.3.2 (2018-09-04)
+
+* Add support for PHP ^7.2
+
 ### v0.3.1 (2018-05-30)
 
 * Login form provides submission URL in action param to enable the form to be 
