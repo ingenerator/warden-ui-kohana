@@ -9,13 +9,14 @@ namespace Ingenerator\Warden\UI\Kohana\Message\Authentication;
 
 use Ingenerator\Pigeonhole\Message;
 
-class PasswordResetSuccessMessage extends Message
+class PasswordResetSuccessMessage extends Message\KohanaMessage
 {
     public function __construct($email)
     {
         parent::__construct(
-            'Password reset successful',
-            'The password for '.$email.' was successfully changed, you are now logged in',
+            'warden_flash_messages',
+            'authentication.password_reset_success',
+            ['%email%' => $email],
             Message::SUCCESS
         );
     }

@@ -9,13 +9,14 @@ namespace Ingenerator\Warden\UI\Kohana\Message\Register;
 
 use Ingenerator\Pigeonhole\Message;
 
-class RegistrationSuccessMessage extends Message
+class RegistrationSuccessMessage extends Message\KohanaMessage
 {
     public function __construct()
     {
         parent::__construct(
-            'Registration Successful',
-            'You have successfully created an account.',
+            'warden_flash_messages',
+            'register.registration_success',
+            [],
             Message::SUCCESS
         );
     }
