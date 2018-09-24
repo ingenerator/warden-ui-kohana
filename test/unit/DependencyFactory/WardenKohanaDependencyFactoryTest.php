@@ -52,12 +52,12 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit_Framework_TestCase
                         [
                             'doctrine.entity_manager' => EntityManager::class,
                             'kohana.message_provider' => KohanaMessageProvider::class,
+                            'kohana.psr_log'          => \PSR\Log\LoggerInterface::class,
                             'kohana.session'          => \Session::class,
                             'swiftmailer.mailer'      => \Swift_Mailer::class,
                             'tokenista.tokenista'     => Tokenista::class,
                             'validation.validator'    => ValidatorInterface::class,
                             'view.layout.default'     => PageLayoutView::class,
-
                         ]
                     ),
                 ],

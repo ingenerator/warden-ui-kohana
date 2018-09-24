@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Log all failed logins
 * Extract all flash message texts to message file rather than hardcoding
 
 ### v0.3.2 (2018-09-04)

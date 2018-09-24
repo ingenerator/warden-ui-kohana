@@ -219,6 +219,7 @@ class WardenKohanaDependencyFactory
                 '%warden.view.login.login%',
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
+                '%kohana.psr_log%',
             ],
             LogoutController::class        => [
                 '%warden.support.interactor_request_factory%',
