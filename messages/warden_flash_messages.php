@@ -26,15 +26,15 @@ return [
         ],
     ],
     'register'       => [
-        'register.email_verification_sent'    => [
+        'email_verification_sent'    => [
             'title'   => 'Verification Email Sent',
             'message' => 'Please check your inbox at %email% and click the link to continue',
         ],
-        'register.existing_user_registration' => [
+        'existing_user_registration' => [
             'title'   => 'You\'re already registered',
             'message' => '%email% is already registered - please login below.',
         ],
-        'register.registration_success'       => [
+        'registration_success'       => [
             'title'   => 'Registration Successful',
             'message' => 'You have successfully created an account.',
         ],

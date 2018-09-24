@@ -16,7 +16,7 @@ class UnregisteredUserMessage extends Message\KohanaMessage
         parent::__construct(
             'warden_flash_messages',
             'authentication.unregistered_user',
-            [],
+            ['%email%' => $email],
             Message::WARNING
         );
     }
