@@ -16,6 +16,7 @@ use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
+use Psr\Log\LoggerInterface;
 
 class LoginController extends WardenBaseController
 {
@@ -23,6 +24,11 @@ class LoginController extends WardenBaseController
      * @var LoginInteractor
      */
     protected $interactor;
+
+    /**
+     * @var \Psr\Log\LoggerInterface 
+     */
+    protected $logger;
 
     /**
      * @var LoginView
@@ -44,10 +50,12 @@ class LoginController extends WardenBaseController
         LoginInteractor $interactor,
         LoginView $login_view,
         UrlProvider $urls,
-        UserSession $user_session
+        UserSession $user_session,
+        LoggerInterface $logger
     ) {
         parent::__construct($rq_factory);
         $this->interactor   = $interactor;
+        $this->logger       = $logger;
         $this->login_view   = $login_view;
         $this->urls         = $urls;
         $this->user_session = $user_session;
@@ -86,6 +94,9 @@ class LoginController extends WardenBaseController
 
     protected function handleLoginFailure(LoginResponse $result)
     {
+        $this->logger->notice(
+            'Failed login for `'.$result->getEmail().'`: '.$result->getFailureCode()
+        );
         switch ($result->getFailureCode()) {
             case LoginResponse::ERROR_NOT_REGISTERED:
                 $this->handleLoginNotRegistered($result);

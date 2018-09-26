@@ -9,13 +9,14 @@ namespace Ingenerator\Warden\UI\Kohana\Message\Authentication;
 
 use Ingenerator\Pigeonhole\Message;
 
-class UnregisteredUserMessage extends Message
+class UnregisteredUserMessage extends Message\KohanaMessage
 {
     public function __construct($email)
     {
         parent::__construct(
-            'Please register to continue',
-            'The email address '.$email.' is not registered.',
+            'warden_flash_messages',
+            'authentication.unregistered_user',
+            ['%email%' => $email],
             Message::WARNING
         );
     }

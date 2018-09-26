@@ -9,13 +9,14 @@ namespace Ingenerator\Warden\UI\Kohana\Message\Authentication;
 
 use Ingenerator\Pigeonhole\Message;
 
-class LogoutSuccessMessage extends Message
+class LogoutSuccessMessage extends Message\KohanaMessage
 {
     public function __construct()
     {
         parent::__construct(
-            'You have logged out',
-            'Come back soon!',
+            'warden_flash_messages',
+            'authentication.logout_success',
+            [],
             Message::SUCCESS
         );
     }
