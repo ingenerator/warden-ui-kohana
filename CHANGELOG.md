@@ -1,5 +1,8 @@
 ### Unreleased
 
+* [BREAKING] Update user repository and notification mailer interfaces in line 
+  with warden-core 0.3. 
+
 ### v0.3.3 (2018-09-26)
 
 * Log all failed logins

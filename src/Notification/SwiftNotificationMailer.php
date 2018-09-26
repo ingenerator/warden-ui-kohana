@@ -37,7 +37,7 @@ class SwiftNotificationMailer implements UserNotificationMailer
         $this->messages     = $messages;
     }
 
-    public function send(UserNotification $notification)
+    public function sendWardenNotification(UserNotification $notification)
     {
         if ($notification instanceof ConfirmationRequiredNotification) {
             $this->sendConfirmationRequired($notification);

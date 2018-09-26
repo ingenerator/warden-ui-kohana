@@ -9,6 +9,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\UserSession;
 
 use Doctrine\Instantiator\Exception\UnexpectedValueException;
 use Ingenerator\Warden\Core\Repository\ArrayUserRepository;
+use Ingenerator\Warden\Core\Repository\UnknownUserException;
 use Ingenerator\Warden\Core\Repository\UserRepository;
 use Ingenerator\Warden\UI\Kohana\UserSession\KohanaUserSession;
 use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
@@ -85,8 +86,8 @@ class KohanaUserSessionTest extends UserSessionTest
 
         try {
             $this->newSubject()->getUser();
-            $this->fail('Expected UnexpectedValueException, none got');
-        } catch (\UnexpectedValueException $e) {
+            $this->fail('Expected exception, none got');
+        } catch (UnknownUserException $e) {
             $this->assertNull($this->session_driver->get('user_id'), 'Session user ID should be cleared');
         }
     }

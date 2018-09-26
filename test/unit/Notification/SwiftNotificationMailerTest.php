@@ -44,7 +44,7 @@ class SwiftNotificationMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function test_it_throws_on_unsupported_notification_type()
     {
-        $this->newSubject()->send(
+        $this->newSubject()->sendWardenNotification(
             $this->getMockBuilder(UserNotification::class)->disableOriginalConstructor()->getMock()
         );
     }
@@ -59,12 +59,12 @@ class SwiftNotificationMailerTest extends \PHPUnit_Framework_TestCase
     public function test_it_sends_email_from_configured_sender()
     {
         $this->config = [
-            'email_sender'      => 'warden-send@mail.net',
+            'email_sender'      => 'warden-sendWardenNotification@mail.net',
             'email_sender_name' => 'Mail Warden',
         ];
         $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.com']);
         $mail = $this->mailer->assertSentOne();
-        $this->assertSame(['warden-send@mail.net' => 'Mail Warden'], $mail->getFrom());
+        $this->assertSame(['warden-sendWardenNotification@mail.net' => 'Mail Warden'], $mail->getFrom());
     }
 
     public function test_it_sets_subject_from_message_provider_for_notification()
@@ -139,7 +139,7 @@ class SwiftNotificationMailerTest extends \PHPUnit_Framework_TestCase
             $values['action'],
             $values['continuation_url']
         );
-        $this->newSubject()->send($notification);
+        $this->newSubject()->sendWardenNotification($notification);
     }
 
     protected function setUp()
