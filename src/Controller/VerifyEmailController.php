@@ -15,6 +15,7 @@ use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Register\EmailVerificationSentMessage;
 use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
+use Psr\Log\LoggerInterface;
 
 class VerifyEmailController extends WardenBaseController
 {
@@ -38,18 +39,25 @@ class VerifyEmailController extends WardenBaseController
      */
     protected $verify_view;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
     public function __construct(
         InteractorRequestFactory $rq_factory,
         EmailVerificationInteractor $email_interactor,
         EmailVerificationView $verify_view,
         UrlProvider $urls,
-        UserSession $session
+        UserSession $session,
+        LoggerInterface $logger
     ) {
         parent::__construct($rq_factory);
         $this->urls             = $urls;
         $this->session          = $session;
         $this->email_interactor = $email_interactor;
         $this->verify_view      = $verify_view;
+        $this->logger           = $logger;
     }
 
     public function before()
@@ -94,13 +102,28 @@ class VerifyEmailController extends WardenBaseController
 
     protected function handleEmailVerificationFailed(EmailVerificationResponse $result)
     {
-        if ($result->isFailureCode(EmailVerificationResponse::ERROR_ALREADY_REGISTERED)) {
+        if ($result->isFailureCode(EmailVerificationResponse::ERROR_RATE_LIMITED)) {
+            $this->handleThrottledRegisterAttempt($result);
+        } elseif ($result->isFailureCode(EmailVerificationResponse::ERROR_ALREADY_REGISTERED)) {
             $this->handleRegisterAttemptForExistingUser($this->urls, $result->getEmail());
         } elseif ($result->isFailureCode(EmailVerificationResponse::ERROR_DETAILS_INVALID)) {
             $this->displayEmailVerificationForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
         } else {
             throw new \UnexpectedValueException('Unexpected email verification failure: '.$result->getFailureCode());
         }
+    }
+
+
+    protected function handleThrottledRegisterAttempt(EmailVerificationResponse $result)
+    {
+        $this->logger->debug(
+            sprintf(
+                'Skipped sending verification to %s (rate limit will clear %s)',
+                $result->getEmail(),
+                $result->canRetryAfter()->format(\DateTime::ATOM)
+            )
+        );
+        $this->handleEmailVerificationSent($result);
     }
 
 }

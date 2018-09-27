@@ -27,6 +27,25 @@ return [
             'cost' => 10,
         ],
     ],
+    'rate_limits' => [
+        'bucket_lock'  => [
+            'timeout_ms'    => 500,
+            'retry_wait_ms' => 5,
+            'lock_ttl_secs' => 5,
+        ],
+        'bucket_types' => [
+            'warden.email.register'       => [
+                // Send max of one email every 20 minutes
+                'bucket_size'       => 1,
+                'leak_time_seconds' => 20 * 60,
+            ],
+            'warden.email.reset-password' => [
+                // Send max of one email every 20 minutes
+                'bucket_size'       => 1,
+                'leak_time_seconds' => 20 * 60
+            ],
+        ],
+    ],
     'url_routing'         => [
         'after-login'             => [
             'url'              => '/profile',

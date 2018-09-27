@@ -1,5 +1,7 @@
 ### Unreleased
 
+* [FEATURE]  Handle and log rate-limited email verification attempts for login and registration
+* [BREAKING] Update dependency definitions for rate-limiting in warden-core 
 * [BREAKING] Update user repository and notification mailer interfaces in line 
   with warden-core 0.3. 
 

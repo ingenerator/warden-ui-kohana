@@ -26,7 +26,7 @@ class LoginController extends WardenBaseController
     protected $interactor;
 
     /**
-     * @var \Psr\Log\LoggerInterface 
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -102,6 +102,10 @@ class LoginController extends WardenBaseController
                 $this->handleLoginNotRegistered($result);
                 break;
 
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case LoginResponse::ERROR_PASSWORD_INCORRECT_RESET_THROTTLED:
+                $this->logThrottledPasswordReset($result);
+                // Continue to the next step - no particular need for the user to know
             case LoginResponse::ERROR_PASSWORD_INCORRECT:
                 $this->handleLoginInvalidPassword($result);
                 break;
@@ -126,6 +130,17 @@ class LoginController extends WardenBaseController
     {
         $this->getPigeonhole()->add(new IncorrectPasswordMessage($result->getEmail()));
         $this->displayLoginForm(new Fieldset(['email' => $result->getEmail()], ['password' => 'Incorrect password']));
+    }
+
+    protected function logThrottledPasswordReset(LoginResponse $result)
+    {
+        $this->logger->debug(
+            sprintf(
+                'Skipped sending reset to %s (rate limit will clear %s)',
+                $result->getEmail(),
+                $result->canRetryAfter()->format(\DateTime::ATOM)
+            )
+        );
     }
 
 

@@ -38,6 +38,7 @@ class WardenKohanaDependencyFactory
                                 '%warden.validator.validator%',
                                 '%warden.repository.user%',
                                 '%warden.support.token_service%',
+                                '%warden.rate_limit.leaky_bucket%',
                                 '%warden.support.url_provider%',
                                 '%warden.notification.mailer%',
                             ],
@@ -101,6 +102,23 @@ class WardenKohanaDependencyFactory
                                 '%warden.config.configuration%',
                                 '%doctrine.entity_manager%',
                             ],
+                        ],
+                    ],
+                ],
+                'rate_limit' => [
+                    'leaky_bucket'         => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\RateLimit\StorageBackedLeakyBucket::class,
+                            'arguments' => [
+                                '%warden.rate_limit.leaky_bucket_storage%',
+                                '@warden.rate_limits@'
+                            ],
+                        ],
+                    ],
+                    'leaky_bucket_storage' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\RateLimit\ApcuBucketStorage::class,
+                            'arguments' => []
                         ],
                     ],
                 ],
@@ -252,6 +270,7 @@ class WardenKohanaDependencyFactory
                 '%warden.view.registration.email_verification%',
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
+                '%kohana.psr_log%',
             ],
         ];
 
