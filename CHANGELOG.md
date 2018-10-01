@@ -1,5 +1,8 @@
 ### Unreleased
 
+* [BREAKING]  Add optional controller endpoints for triggering and completing change to a 
+  verified new user email address. If you don't want to expose this, set route_controller to 
+  FALSE for the `change-email` and `complete-change-email` actions in config/warden.php 
 * [FEATURE]  Handle and log rate-limited email verification attempts for login and registration
 * [BREAKING] Update dependency definitions for rate-limiting in warden-core 
 * [BREAKING] Update user repository and notification mailer interfaces in line 

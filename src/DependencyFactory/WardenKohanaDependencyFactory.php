@@ -8,6 +8,8 @@ namespace Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
+use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
 use Ingenerator\Warden\UI\Kohana\Controller\ProfileController;
@@ -31,6 +33,17 @@ class WardenKohanaDependencyFactory
                     ],
                 ],
                 'interactor'   => [
+                    'change_email' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\Interactor\ChangeEmailInteractor::class,
+                            'arguments' => [
+                                '%warden.validator.validator%',
+                                '%warden.support.token_service%',
+                                '%warden.repository.user%',
+                                '%warden.user_session.session%',
+                            ],
+                        ],
+                    ],
                     'email_verification' => [
                         '_settings' => [
                             'class'     => \Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor::class,
@@ -209,6 +222,14 @@ class WardenKohanaDependencyFactory
                         ],
                     ],
                     'profile'      => [
+                        'change_email' => [
+                            '_settings' => [
+                                'class'     => \Ingenerator\Warden\UI\Kohana\View\ChangeEmailView::class,
+                                'arguments' => [
+                                    '%view.layout.default%',
+                                ],
+                            ],
+                        ],
                         'profile' => [
                             '_settings' => [
                                 'class'     => \Ingenerator\Warden\UI\Kohana\View\ProfileView::class,
@@ -231,6 +252,20 @@ class WardenKohanaDependencyFactory
     public static function controllerDefinitions(array $only_controllers = NULL)
     {
         $controllers = [
+            ChangeEmailController::class   => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.email_verification%',
+                '%warden.view.profile.change_email%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
+                '%kohana.psr_log%',
+            ],
+            CompleteChangeEmailController::class => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.change_email%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
+            ],
             LoginController::class         => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.interactor.login%',

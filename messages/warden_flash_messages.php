@@ -25,6 +25,24 @@ return [
             'message' => 'The email address %email% is not registered',
         ],
     ],
+    'change_email' => [
+        'email_already_registered' => [
+            'title'   => 'Email address in use',
+            'message' => 'You cannot change your email address to %email% because there is already an account registered to that address',
+        ],
+        'email_changed'            => [
+            'title'   => 'Email updated',
+            'message' => 'You have successfully updated your email to <strong>%email%</strong>',
+        ],
+        'invalid_verify_link'      => [
+            'title'   => 'Invalid link',
+            'message' => 'The link you clicked was invalid or expired - your email address has not been updated',
+        ],
+        'verification_email_sent'  => [
+            'title'   => 'Confirm your new email',
+            'message' => 'Please check your inbox at %email% and click the link to verify and save your new address',
+        ],
+    ],
     'register'       => [
         'email_verification_sent'    => [
             'title'   => 'Verification Email Sent',

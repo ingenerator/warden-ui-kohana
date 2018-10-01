@@ -1,5 +1,7 @@
 <?php
 
+use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
 use Ingenerator\Warden\UI\Kohana\Controller\ProfileController;
@@ -34,6 +36,11 @@ return [
             'lock_ttl_secs' => 5,
         ],
         'bucket_types' => [
+            'warden.email.change-email'       => [
+                // Send max of one email every 20 minutes
+                'bucket_size'       => 1,
+                'leak_time_seconds' => 20 * 60,
+            ],
             'warden.email.register'       => [
                 // Send max of one email every 20 minutes
                 'bucket_size'       => 1,
@@ -58,6 +65,14 @@ return [
         'after-verify-email'      => [
             'url'              => '/',
             'route_controller' => FALSE,
+        ],
+        'change-email' => [
+            'url'              => '/profile/change-email',
+            'route_controller' => ChangeEmailController::class,
+        ],
+        'complete-change-email' => [
+            'url'              => '/profile/change-email-confirm',
+            'route_controller' => CompleteChangeEmailController::class,
         ],
         'default-user-home'       => [
             'url'              => '/profile',
