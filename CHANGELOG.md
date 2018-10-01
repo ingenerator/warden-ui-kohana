@@ -1,5 +1,6 @@
 ### Unreleased
 
+* [FEATURE]  Add controller etc for authenticated user to change their own password.
 * [BREAKING]  Add optional controller endpoints for triggering and completing change to a 
   verified new user email address. If you don't want to expose this, set route_controller to 
   FALSE for the `change-email` and `complete-change-email` actions in config/warden.php 

@@ -25,7 +25,7 @@ return [
             'message' => 'The email address %email% is not registered',
         ],
     ],
-    'change_email' => [
+    'change_email'   => [
         'email_already_registered' => [
             'title'   => 'Email address in use',
             'message' => 'You cannot change your email address to %email% because there is already an account registered to that address',
@@ -41,6 +41,12 @@ return [
         'verification_email_sent'  => [
             'title'   => 'Confirm your new email',
             'message' => 'Please check your inbox at %email% and click the link to verify and save your new address',
+        ],
+    ],
+    'profile'        => [
+        'password_changed' => [
+            'title'   => 'Password updated',
+            'message' => 'Your password has been changed.',
         ],
     ],
     'register'       => [

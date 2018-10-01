@@ -1,6 +1,7 @@
 <?php
 
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
+use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
 use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
@@ -69,6 +70,10 @@ return [
         'change-email' => [
             'url'              => '/profile/change-email',
             'route_controller' => ChangeEmailController::class,
+        ],
+        'change-password' => [
+            'url'              => '/profile/change-password',
+            'route_controller' => ChangePasswordController::class,
         ],
         'complete-change-email' => [
             'url'              => '/profile/change-email-confirm',
