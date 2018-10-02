@@ -10,6 +10,7 @@ use Ingenerator\Warden\Core\Entity\User;
 use Ingenerator\Warden\Core\Repository\UnknownUserException;
 use Ingenerator\Warden\Core\Repository\UserRepository;
 use Ingenerator\Warden\Core\UserSession\SimplePropertyUserSession;
+use Ingenerator\Warden\UI\Kohana\Entity\LastLoginTrackingUser;
 
 class KohanaUserSession extends SimplePropertyUserSession
 {
@@ -37,6 +38,11 @@ class KohanaUserSession extends SimplePropertyUserSession
         parent::login($user);
         $this->session_driver->regenerate();
         $this->session_driver->set('user_id', $user->getId());
+
+        if ($user instanceof LastLoginTrackingUser) {
+            $user->markLoggedInAt(new \DateTimeImmutable);
+            $this->user_repository->save($user);
+        }
     }
 
     /**

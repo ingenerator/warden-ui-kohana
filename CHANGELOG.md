@@ -1,5 +1,9 @@
 ### Unreleased
 
+* [Feature]  Provide `LastLoginTrackingUser` interface to identify entities that have a 
+  property(/ies) that should be updated every time the user logs in - for example last login
+  time. Apply this to your entity to have KohanaUserSession update and persist the user on
+  every login.
 * [Feature]  Handle `inactive account` response on login and add controller etc to handle
   users clicking through on activation links.
 * [Feature]  Add controller etc for authenticated user to change their own password.
