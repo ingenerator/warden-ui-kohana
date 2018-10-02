@@ -29,6 +29,9 @@ use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
             type="password"
             name="password"
             id="input-password"
+            minlength="8"
+            placeholder="At least 8 characters"
+            autocomplete="off"
             required>
     </div>
     <div class="form-group">

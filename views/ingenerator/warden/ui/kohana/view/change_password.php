@@ -38,8 +38,8 @@
         <input
                 class="form-control"
                 type="password"
-                minlength="6"
-                placeholder="At least 6 characters"
+                minlength="8"
+                placeholder="At least 8 characters"
                 autocomplete="off"
                 name="new_password"
                 id="input-new-password"
