@@ -4,6 +4,10 @@
  */
 return [
     'authentication' => [
+        'account_not_active' => [
+            'title'   => 'Account not active',
+            'message' => 'You have not verified your email address - please check your inbox at %email% and click the link to complete your registration',
+        ],
         'incorrect_password'          => [
             'title'   => 'That was not the correct password',
             'message' => 'We\'ve emailed a link to %email% for you to reset it',
@@ -50,6 +54,10 @@ return [
         ],
     ],
     'register'       => [
+        'account_activated' => [
+            'title'   => 'Account verified',
+            'message' => 'Thank you - you have now verified your email and your account is active',
+        ],
         'email_verification_sent'    => [
             'title'   => 'Verification Email Sent',
             'message' => 'Please check your inbox at %email% and click the link to continue',
@@ -57,6 +65,10 @@ return [
         'existing_user_registration' => [
             'title'   => 'You\'re already registered',
             'message' => '%email% is already registered - please login below.',
+        ],
+        'invalid_activation_link' => [
+            'title'   => 'Invalid link',
+            'message' => 'The link you clicked was invalid or expired. Please try to log in again and we\'ll send a new email if required',
         ],
         'registration_success'       => [
             'title'   => 'Registration Successful',

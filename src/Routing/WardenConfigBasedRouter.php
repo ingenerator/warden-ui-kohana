@@ -76,6 +76,12 @@ class WardenConfigBasedRouter implements UrlProvider
         return $this->requireConfigUrl('change-password');
     }
 
+    public function getCompleteActivationUrl(array $params)
+    {
+        return $this->requireConfigUrl('complete-activation', $params);
+    }
+
+
     public function getCompleteChangeEmailUrl(array $params)
     {
         return $this->requireConfigUrl('complete-change-email', $params);

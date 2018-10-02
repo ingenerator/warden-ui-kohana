@@ -13,6 +13,7 @@ use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
+use Ingenerator\Warden\UI\Kohana\Message\Authentication\AccountNotActiveMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
@@ -54,10 +55,10 @@ class LoginController extends WardenBaseController
         LoggerInterface $logger
     ) {
         parent::__construct($rq_factory);
-        $this->interactor   = $interactor;
-        $this->logger       = $logger;
-        $this->login_view   = $login_view;
-        $this->urls         = $urls;
+        $this->interactor = $interactor;
+        $this->logger = $logger;
+        $this->login_view = $login_view;
+        $this->urls = $urls;
         $this->user_session = $user_session;
     }
 
@@ -104,19 +105,30 @@ class LoginController extends WardenBaseController
 
             /** @noinspection PhpMissingBreakStatementInspection */
             case LoginResponse::ERROR_PASSWORD_INCORRECT_RESET_THROTTLED:
-                $this->logThrottledPasswordReset($result);
-                // Continue to the next step - no particular need for the user to know
+                $this->logThrottledEmailVerification($result, 'reset');
+            // Continue to the next step - no particular need for the user to know
             case LoginResponse::ERROR_PASSWORD_INCORRECT:
                 $this->handleLoginInvalidPassword($result);
                 break;
 
             case LoginResponse::ERROR_DETAILS_INVALID:
-                $this->displayLoginForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
+                $this->displayLoginForm(
+                    new Fieldset($this->request->post(), $result->getValidationErrors())
+                );
                 break;
 
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case LoginResponse::ERROR_NOT_ACTIVE_ACTIVATION_THROTTLED:
+                $this->logThrottledEmailVerification($result, 'activation');
+            // Continue to the next step - no particular need for the user to know
             case LoginResponse::ERROR_NOT_ACTIVE:
+                $this->handleLoginInactiveAccount($result);
+                break;
+
             default:
-                throw new \UnexpectedValueException('Unexpected login failure: '.$result->getFailureCode());
+                throw new \UnexpectedValueException(
+                    'Unexpected login failure: '.$result->getFailureCode()
+                );
         }
     }
 
@@ -129,18 +141,27 @@ class LoginController extends WardenBaseController
     protected function handleLoginInvalidPassword(LoginResponse $result)
     {
         $this->getPigeonhole()->add(new IncorrectPasswordMessage($result->getEmail()));
-        $this->displayLoginForm(new Fieldset(['email' => $result->getEmail()], ['password' => 'Incorrect password']));
+        $this->displayLoginForm(
+            new Fieldset(['email' => $result->getEmail()], ['password' => 'Incorrect password'])
+        );
     }
 
-    protected function logThrottledPasswordReset(LoginResponse $result)
+    protected function logThrottledEmailVerification(LoginResponse $result, $type)
     {
         $this->logger->debug(
             sprintf(
-                'Skipped sending reset to %s (rate limit will clear %s)',
+                'Skipped sending %s to %s (rate limit will clear %s)',
+                $type,
                 $result->getEmail(),
                 $result->canRetryAfter()->format(\DateTime::ATOM)
             )
         );
+    }
+
+    protected function handleLoginInactiveAccount(LoginResponse $result)
+    {
+        $this->getPigeonhole()->add(new AccountNotActiveMessage($result->getEmail()));
+        $this->displayLoginForm(new Fieldset(['email' => $result->getEmail()], []));
     }
 
 

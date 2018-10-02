@@ -8,6 +8,7 @@ namespace Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
 use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
@@ -34,6 +35,17 @@ class WardenKohanaDependencyFactory
                     ],
                 ],
                 'interactor'   => [
+                    'activate_account' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\Interactor\ActivateAccountInteractor::class,
+                            'arguments' => [
+                                '%warden.validator.validator%',
+                                '%warden.support.token_service%',
+                                '%warden.repository.user%',
+                                '%warden.user_session.session%',
+                            ],
+                        ],
+                    ],
                     'change_email' => [
                         '_settings' => [
                             'class'     => \Ingenerator\Warden\Core\Interactor\ChangeEmailInteractor::class,
@@ -271,7 +283,7 @@ class WardenKohanaDependencyFactory
     public static function controllerDefinitions(array $only_controllers = NULL)
     {
         $controllers = [
-            ChangeEmailController::class   => [
+            ChangeEmailController::class             => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.interactor.email_verification%',
                 '%warden.view.profile.change_email%',
@@ -286,6 +298,12 @@ class WardenKohanaDependencyFactory
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
                 '%kohana.psr_log%',
+            ],
+            CompleteActivateAccountController::class => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.activate_account%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
             ],
             CompleteChangeEmailController::class => [
                 '%warden.support.interactor_request_factory%',

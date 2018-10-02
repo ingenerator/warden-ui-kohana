@@ -1,5 +1,6 @@
 <?php
 
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
 use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
@@ -37,6 +38,11 @@ return [
             'lock_ttl_secs' => 5,
         ],
         'bucket_types' => [
+            'warden.email.activate-account'       => [
+                // Send max of one email every 20 minutes
+                'bucket_size'       => 1,
+                'leak_time_seconds' => 20 * 60,
+            ],
             'warden.email.change-email'       => [
                 // Send max of one email every 20 minutes
                 'bucket_size'       => 1,
@@ -74,6 +80,10 @@ return [
         'change-password' => [
             'url'              => '/profile/change-password',
             'route_controller' => ChangePasswordController::class,
+        ],
+        'complete-activation' => [
+            'url'              => '/login/activate',
+            'route_controller' => CompleteActivateAccountController::class,
         ],
         'complete-change-email' => [
             'url'              => '/profile/change-email-confirm',

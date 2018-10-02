@@ -1,10 +1,12 @@
 ### Unreleased
 
-* [FEATURE]  Add controller etc for authenticated user to change their own password.
-* [BREAKING]  Add optional controller endpoints for triggering and completing change to a 
+* [Feature]  Handle `inactive account` response on login and add controller etc to handle
+  users clicking through on activation links.
+* [Feature]  Add controller etc for authenticated user to change their own password.
+* [BREAKING] Add optional controller endpoints for triggering and completing change to a 
   verified new user email address. If you don't want to expose this, set route_controller to 
   FALSE for the `change-email` and `complete-change-email` actions in config/warden.php 
-* [FEATURE]  Handle and log rate-limited email verification attempts for login and registration
+* [Feature]  Handle and log rate-limited email verification attempts for login and registration
 * [BREAKING] Update dependency definitions for rate-limiting in warden-core 
 * [BREAKING] Update user repository and notification mailer interfaces in line 
   with warden-core 0.3. 
