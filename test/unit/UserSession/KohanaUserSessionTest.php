@@ -19,7 +19,7 @@ use test\unit\Ingenerator\Warden\Core\UserSession\UserSessionTest;
 class KohanaUserSessionTest extends UserSessionTest
 {
     /**
-     * @var \Session_Fake
+     * @var \Session_Array
      */
     protected $session_driver;
 
@@ -95,7 +95,7 @@ class KohanaUserSessionTest extends UserSessionTest
     public function setUp()
     {
         parent::setUp();
-        $this->session_driver  = new \Session_Fake;
+        $this->session_driver  = new \Session_Array;
         $this->user_repository = $this->getMockBuilder(UserRepository::class)->getMock();
         $this->user_repository->expects($this->never())->method($this->anything());
     }
