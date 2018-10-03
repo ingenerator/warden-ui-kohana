@@ -20,6 +20,10 @@ return [
             'title'   => 'Password reset failed',
             'message' => 'The link you clicked was invalid or expired. Please try to log in again and we\'ll send a new email if required',
         ],
+        'login_rate_limited' => [
+            'title'   => 'Please wait a moment',
+            'message' => 'We are currently experiencing a high volume of login attempts - please try again in a minute or two.'
+        ],
         'logout_success'              => [
             'title'   => 'You have logged out',
             'message' => 'Come back soon!',

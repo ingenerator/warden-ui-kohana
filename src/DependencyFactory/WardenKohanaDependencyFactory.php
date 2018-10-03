@@ -85,6 +85,7 @@ class WardenKohanaDependencyFactory
                             'class'     => \Ingenerator\Warden\Core\Interactor\LoginInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
+                                '%warden.rate_limit.leaky_bucket%',
                                 '%warden.repository.user%',
                                 '%warden.support.password_hasher%',
                                 '%warden.user_session.session%',

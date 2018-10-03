@@ -1,5 +1,8 @@
 ### Unreleased
 
+* [Feature]  Support global and per-account rate limiting of login attempts. Customise the
+  warden.login.global and warden.login.user bucket_types in config/warden.php to set 
+  site-specific limits.
 * [Feature]  Pre-validate registration and password reset links and show the user an error
   immediately rather than on save if the link they're using has expired.
 * [Feature]  Handle cases where a user's email fails MX validation at time of login and 

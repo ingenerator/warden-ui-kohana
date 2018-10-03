@@ -1,8 +1,8 @@
 <?php
 
-use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
@@ -57,6 +57,20 @@ return [
                 // Send max of one email every 20 minutes
                 'bucket_size'       => 1,
                 'leak_time_seconds' => 20 * 60
+            ],
+            'warden.login.global' => [
+                // Total login attempts by all accounts from all clients
+                // You should customise this for each site both to match usage and so that
+                // the value isn't publicly known
+                'bucket_size'       => 90,
+                'leak_time_seconds' => 0.2
+            ],
+            'warden.login.user'   => [
+                // Login attempts by an individual user
+                // You should customise this for each site both to match usage and so that
+                // the value isn't publicly known
+                'bucket_size'       => 10,
+                'leak_time_seconds' => 1,
             ],
         ],
     ],

@@ -16,6 +16,7 @@ use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\AccountNotActiveMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\LoginEmailVerificationFailedMessage;
+use Ingenerator\Warden\UI\Kohana\Message\Authentication\LoginRateLimitedMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
 use Psr\Log\LoggerInterface;
@@ -56,10 +57,10 @@ class LoginController extends WardenBaseController
         LoggerInterface $logger
     ) {
         parent::__construct($rq_factory);
-        $this->interactor = $interactor;
-        $this->logger = $logger;
-        $this->login_view = $login_view;
-        $this->urls = $urls;
+        $this->interactor   = $interactor;
+        $this->logger       = $logger;
+        $this->login_view   = $login_view;
+        $this->urls         = $urls;
         $this->user_session = $user_session;
     }
 
@@ -130,6 +131,10 @@ class LoginController extends WardenBaseController
                 $this->handleLoginEmailVerificationFailed($result);
                 break;
 
+            case LoginResponse::ERROR_RATE_LIMITED:
+                $this->handleLoginRateLimited($result);
+                break;
+
             default:
                 throw new \UnexpectedValueException(
                     'Unexpected login failure: '.$result->getFailureCode()
@@ -187,6 +192,19 @@ class LoginController extends WardenBaseController
     {
         $this->getPigeonhole()->add(new AccountNotActiveMessage($result->getEmail()));
         $this->displayLoginForm(new Fieldset(['email' => $result->getEmail()], []));
+    }
+
+    protected function handleLoginRateLimited(LoginResponse $result)
+    {
+        $this->getPigeonhole()->add(new LoginRateLimitedMessage);
+        $this->logger->warning(
+            sprintf(
+                'Login denied - rate limited (%s) - will reset %s',
+                $result->getFailureDetail(),
+                $result->canRetryAfter()->format(\DateTime::ATOM)
+            )
+        );
+        $this->displayLoginForm(new Fieldset($this->request->post(), []));
     }
 
 
