@@ -74,6 +74,10 @@ return [
             'title'   => 'Invalid link',
             'message' => 'The link you clicked was invalid or expired. Please try to log in again and we\'ll send a new email if required',
         ],
+        'invalid_register_link' => [
+            'title'   => 'Invalid link',
+            'message' => 'The link you clicked was invalid or expired. Please try to register again and we\'ll send you a new email',
+        ],
         'registration_success'       => [
             'title'   => 'Registration Successful',
             'message' => 'You have successfully created an account.',

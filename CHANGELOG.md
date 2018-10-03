@@ -1,5 +1,7 @@
 ### Unreleased
 
+* [Feature]  Pre-validate registration and password reset links and show the user an error
+  immediately rather than on save if the link they're using has expired.
 * [Feature]  Handle cases where a user's email fails MX validation at time of login and 
   a password reset / activation therefore cannot be sent.
 * [Feature]  Provide `LastLoginTrackingUser` interface to identify entities that have a 

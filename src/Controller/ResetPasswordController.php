@@ -8,6 +8,7 @@ namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
 use Ingenerator\Warden\Core\Interactor\PasswordResetInteractor;
+use Ingenerator\Warden\Core\Interactor\PasswordResetRequest;
 use Ingenerator\Warden\Core\Interactor\PasswordResetResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
@@ -61,8 +62,14 @@ class ResetPasswordController extends WardenBaseController
 
     public function action_get()
     {
-        // @todo: If there is no token or it's not valid we should just bork straight away!
-        $this->displayPasswordResetForm(new Fieldset(['email' => $this->request->query('email')], []));
+        $token_state = $this->reset_interactor->validateToken($this->makePasswordResetRequest());
+        if ( ! $token_state->isValid()) {
+            $this->handleInvalidLinkFailure();
+        }
+
+        $this->displayPasswordResetForm(
+            new Fieldset(['email' => $token_state->getUserEmail()], [])
+        );
     }
 
     protected function displayPasswordResetForm(Fieldset $fieldset)
@@ -73,21 +80,26 @@ class ResetPasswordController extends WardenBaseController
 
     public function action_post()
     {
-        $values = [
-            'email'        => $this->request->query('email'),
-            'token'        => $this->request->query('token'),
-            'new_password' => $this->request->post('new_password'),
-        ];
-
-        $result = $this->reset_interactor->execute(
-            $this->makeInteractorRequest('password_reset', 'fromArray', $values)
-        );
+        $result = $this->reset_interactor->execute($this->makePasswordResetRequest());
 
         if ($result->wasSuccessful()) {
             $this->handlePasswordResetSuccess($result);
         } else {
             $this->handlePasswordResetFailure($result);
         }
+    }
+
+    /**
+     * @return PasswordResetRequest
+     */
+    protected function makePasswordResetRequest()
+    {
+        $values = [
+            'user_id'      => $this->request->query('user_id'),
+            'token'        => $this->request->query('token'),
+            'new_password' => $this->request->post('new_password'),
+        ];
+        return $this->makeInteractorRequest('password_reset', 'fromArray', $values);
     }
 
     protected function handlePasswordResetSuccess(PasswordResetResponse $result)
@@ -99,15 +111,24 @@ class ResetPasswordController extends WardenBaseController
     protected function handlePasswordResetFailure(PasswordResetResponse $result)
     {
         if ($result->isFailureCode(PasswordResetResponse::ERROR_TOKEN_INVALID)) {
-            $this->getPigeonhole()->add(new InvalidPasswordResetLinkMessage);
-            $this->redirect($this->urls->getLoginUrl($result->getEmail()));
+            $this->handleInvalidLinkFailure();
 
         } elseif ($result->isFailureCode(PasswordResetResponse::ERROR_DETAILS_INVALID)) {
-            $this->displayPasswordResetForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
+            $this->displayPasswordResetForm(
+                new Fieldset($this->request->post(), $result->getValidationErrors())
+            );
 
         } else {
-            throw new \UnexpectedValueException('Unexpected registration failure: '.$result->getFailureCode());
+            throw new \UnexpectedValueException(
+                'Unexpected registration failure: '.$result->getFailureCode()
+            );
         }
+    }
+
+    protected function handleInvalidLinkFailure()
+    {
+        $this->getPigeonhole()->add(new InvalidPasswordResetLinkMessage);
+        $this->redirect($this->urls->getLoginUrl());
     }
 
 }
