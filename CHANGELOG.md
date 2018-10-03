@@ -1,5 +1,7 @@
 ### Unreleased
 
+* [Feature]  Handle cases where a user's email fails MX validation at time of login and 
+  a password reset / activation therefore cannot be sent.
 * [Feature]  Provide `LastLoginTrackingUser` interface to identify entities that have a 
   property(/ies) that should be updated every time the user logs in - for example last login
   time. Apply this to your entity to have KohanaUserSession update and persist the user on

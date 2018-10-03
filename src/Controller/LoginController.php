@@ -15,6 +15,7 @@ use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\AccountNotActiveMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
+use Ingenerator\Warden\UI\Kohana\Message\Authentication\LoginEmailVerificationFailedMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
 use Psr\Log\LoggerInterface;
@@ -125,6 +126,10 @@ class LoginController extends WardenBaseController
                 $this->handleLoginInactiveAccount($result);
                 break;
 
+            case LoginResponse::ERROR_EMAIL_VERIFICATION_FAILED:
+                $this->handleLoginEmailVerificationFailed($result);
+                break;
+
             default:
                 throw new \UnexpectedValueException(
                     'Unexpected login failure: '.$result->getFailureCode()
@@ -143,6 +148,26 @@ class LoginController extends WardenBaseController
         $this->getPigeonhole()->add(new IncorrectPasswordMessage($result->getEmail()));
         $this->displayLoginForm(
             new Fieldset(['email' => $result->getEmail()], ['password' => 'Incorrect password'])
+        );
+    }
+
+    protected function handleLoginEmailVerificationFailed(LoginResponse $result)
+    {
+        $this->logger->warning(
+            sprintf(
+                'Could not send verification to existing user %s: email currently invalid',
+                $result->getEmail()
+            )
+        );
+        $this->getPigeonhole()->add(new LoginEmailVerificationFailedMessage($result->getEmail()));
+        $this->displayLoginForm(
+            new Fieldset(
+                ['email' => $result->getEmail()],
+                [
+                    'email'    => 'We can\'t contact your email server at the moment',
+                    'password' => 'Incorrect password'
+                ]
+            )
         );
     }
 

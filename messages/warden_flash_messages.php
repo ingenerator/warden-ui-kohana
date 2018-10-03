@@ -8,6 +8,10 @@ return [
             'title'   => 'Account not active',
             'message' => 'You have not verified your email address - please check your inbox at %email% and click the link to complete your registration',
         ],
+        'email_verification_failed' => [
+            'title'   => 'Email server not available',
+            'message' => 'That was not the right password, but we can\'t contact your email server at %email% to send a password reset at the moment. Please try again later.',
+        ],
         'incorrect_password'          => [
             'title'   => 'That was not the correct password',
             'message' => 'We\'ve emailed a link to %email% for you to reset it',
