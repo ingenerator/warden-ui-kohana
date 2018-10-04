@@ -7,18 +7,18 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\UserSession;
 
 
-use Doctrine\Instantiator\Exception\UnexpectedValueException;
 use Ingenerator\Warden\Core\Repository\ArrayUserRepository;
+use Ingenerator\Warden\Core\Repository\UnknownUserException;
 use Ingenerator\Warden\Core\Repository\UserRepository;
+use Ingenerator\Warden\UI\Kohana\Entity\LastLoginTrackingUser;
 use Ingenerator\Warden\UI\Kohana\UserSession\KohanaUserSession;
 use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
-use test\mock\Ingenerator\Warden\UI\Kohana\Session\MockSession;
 use test\unit\Ingenerator\Warden\Core\UserSession\UserSessionTest;
 
 class KohanaUserSessionTest extends UserSessionTest
 {
     /**
-     * @var \Session_Fake
+     * @var \Session_Array
      */
     protected $session_driver;
 
@@ -38,6 +38,17 @@ class KohanaUserSessionTest extends UserSessionTest
     {
         $this->newSubject()->login(UserStub::withId(152));
         $this->assertSame(152, $this->session_driver->get('user_id'));
+    }
+
+    public function test_it_bumps_and_persists_last_login_for_login_tracking_user()
+    {
+        $user = LoginTrackingUserStub::fromArray(['id' => 152, 'login_count' => 15]);
+
+        $this->user_repository = $this->getMockBuilder(UserRepository::class)->getMock();
+        $this->user_repository->expects($this->once())->method('save')->with($user);
+        $this->newSubject()->login($user);
+        $this->assertEquals(new \DateTimeImmutable, $user->getLastLogin(), 'Should have login', 1);
+        $this->assertSame(16, $user->getLoginCount(), 'Should be called once');
     }
 
     public function test_it_clears_user_id_on_logout()
@@ -85,8 +96,8 @@ class KohanaUserSessionTest extends UserSessionTest
 
         try {
             $this->newSubject()->getUser();
-            $this->fail('Expected UnexpectedValueException, none got');
-        } catch (\UnexpectedValueException $e) {
+            $this->fail('Expected exception, none got');
+        } catch (UnknownUserException $e) {
             $this->assertNull($this->session_driver->get('user_id'), 'Session user ID should be cleared');
         }
     }
@@ -94,7 +105,7 @@ class KohanaUserSessionTest extends UserSessionTest
     public function setUp()
     {
         parent::setUp();
-        $this->session_driver  = new \Session_Fake;
+        $this->session_driver  = new \Session_Array;
         $this->user_repository = $this->getMockBuilder(UserRepository::class)->getMock();
         $this->user_repository->expects($this->never())->method($this->anything());
     }
@@ -105,6 +116,29 @@ class KohanaUserSessionTest extends UserSessionTest
             $this->session_driver,
             $this->user_repository
         );
+    }
+
+}
+
+class LoginTrackingUserStub extends UserStub implements LastLoginTrackingUser
+{
+    protected $last_login;
+    protected $login_count;
+
+    public function markLoggedInAt(\DateTimeImmutable $now)
+    {
+        $this->last_login = $now;
+        $this->login_count++;
+    }
+
+    public function getLastLogin()
+    {
+        return $this->last_login;
+    }
+
+    public function getLoginCount()
+    {
+        return $this->login_count;
     }
 
 }

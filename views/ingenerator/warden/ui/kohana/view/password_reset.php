@@ -29,6 +29,9 @@ use Ingenerator\Warden\UI\Kohana\View\PasswordResetView;
         type="password"
         name="new_password"
         id="input-new-password"
+        minlength="8"
+        placeholder="At least 8 characters"
+        autocomplete="off"
         required
     >
   </div>

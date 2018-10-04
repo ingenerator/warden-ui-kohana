@@ -14,9 +14,9 @@
   "require": {
     "php": "^5.5||^7.2",
     "symfony/validator": "^3.0",
-    "ingenerator/warden-core": "^0.2",
+    "ingenerator/warden-core": "^0.3",
     "ingenerator/warden-validator-symfony": "^0.1",
-    "ingenerator/warden-persistence-doctrine": "^0.1",
+    "ingenerator/warden-persistence-doctrine": "^0.2",
     "ingenerator/kohana-view": "^4.0",
     "ingenerator/kohana-extras": "^0.3",
     "ingenerator/kohana-core": "^4.1",

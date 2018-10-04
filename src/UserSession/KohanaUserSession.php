@@ -7,8 +7,10 @@
 namespace Ingenerator\Warden\UI\Kohana\UserSession;
 
 use Ingenerator\Warden\Core\Entity\User;
+use Ingenerator\Warden\Core\Repository\UnknownUserException;
 use Ingenerator\Warden\Core\Repository\UserRepository;
 use Ingenerator\Warden\Core\UserSession\SimplePropertyUserSession;
+use Ingenerator\Warden\UI\Kohana\Entity\LastLoginTrackingUser;
 
 class KohanaUserSession extends SimplePropertyUserSession
 {
@@ -36,6 +38,11 @@ class KohanaUserSession extends SimplePropertyUserSession
         parent::login($user);
         $this->session_driver->regenerate();
         $this->session_driver->set('user_id', $user->getId());
+
+        if ($user instanceof LastLoginTrackingUser) {
+            $user->markLoggedInAt(new \DateTimeImmutable);
+            $this->user_repository->save($user);
+        }
     }
 
     /**
@@ -66,13 +73,12 @@ class KohanaUserSession extends SimplePropertyUserSession
         }
 
         $user_id = $this->getUserId();
-
-        if ( ! $user = $this->user_repository->loadById($user_id)) {
+        try {
+            return $this->user_repository->load($user_id);
+        } catch (UnknownUserException $e) {
             $this->session_driver->delete('user_id');
-            throw new \UnexpectedValueException('Could not load authenticated user with ID '.$user_id);
+            throw $e;
         }
-
-        return $user;
     }
 
     /**

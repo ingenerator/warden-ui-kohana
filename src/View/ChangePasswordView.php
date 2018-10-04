@@ -1,20 +1,18 @@
 <?php
 /**
- * @author    Craig Gosman <craig@ingenerator.com>
+ * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
 
 namespace Ingenerator\Warden\UI\Kohana\View;
 
-use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView;
 use Ingenerator\Warden\Core\Entity\User;
 
 /**
  * @property-read \Ingenerator\Warden\Core\Entity\User $user
  */
-class ProfileView extends AbstractPageContentView
+class ChangePasswordView extends AbstractFormView
 {
-
     protected $variables = [
         'user' => NULL,
     ];
@@ -28,5 +26,6 @@ class ProfileView extends AbstractPageContentView
 
         return $errors;
     }
+
 
 }

@@ -8,6 +8,10 @@ namespace Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
+use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
+use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
 use Ingenerator\Warden\UI\Kohana\Controller\ProfileController;
@@ -31,6 +35,38 @@ class WardenKohanaDependencyFactory
                     ],
                 ],
                 'interactor'   => [
+                    'activate_account' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\Interactor\ActivateAccountInteractor::class,
+                            'arguments' => [
+                                '%warden.validator.validator%',
+                                '%warden.support.token_service%',
+                                '%warden.repository.user%',
+                                '%warden.user_session.session%',
+                            ],
+                        ],
+                    ],
+                    'change_email' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\Interactor\ChangeEmailInteractor::class,
+                            'arguments' => [
+                                '%warden.validator.validator%',
+                                '%warden.support.token_service%',
+                                '%warden.repository.user%',
+                                '%warden.user_session.session%',
+                            ],
+                        ],
+                    ],
+                    'change_password' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\Interactor\ChangePasswordInteractor::class,
+                            'arguments' => [
+                                '%warden.validator.validator%',
+                                '%warden.support.password_hasher%',
+                                '%warden.repository.user%',
+                            ],
+                        ],
+                    ],
                     'email_verification' => [
                         '_settings' => [
                             'class'     => \Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor::class,
@@ -38,6 +74,7 @@ class WardenKohanaDependencyFactory
                                 '%warden.validator.validator%',
                                 '%warden.repository.user%',
                                 '%warden.support.token_service%',
+                                '%warden.rate_limit.leaky_bucket%',
                                 '%warden.support.url_provider%',
                                 '%warden.notification.mailer%',
                             ],
@@ -48,6 +85,7 @@ class WardenKohanaDependencyFactory
                             'class'     => \Ingenerator\Warden\Core\Interactor\LoginInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
+                                '%warden.rate_limit.leaky_bucket%',
                                 '%warden.repository.user%',
                                 '%warden.support.password_hasher%',
                                 '%warden.user_session.session%',
@@ -101,6 +139,23 @@ class WardenKohanaDependencyFactory
                                 '%warden.config.configuration%',
                                 '%doctrine.entity_manager%',
                             ],
+                        ],
+                    ],
+                ],
+                'rate_limit' => [
+                    'leaky_bucket'         => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\RateLimit\StorageBackedLeakyBucket::class,
+                            'arguments' => [
+                                '%warden.rate_limit.leaky_bucket_storage%',
+                                '@warden.rate_limits@'
+                            ],
+                        ],
+                    ],
+                    'leaky_bucket_storage' => [
+                        '_settings' => [
+                            'class'     => \Ingenerator\Warden\Core\RateLimit\ApcuBucketStorage::class,
+                            'arguments' => []
                         ],
                     ],
                 ],
@@ -191,6 +246,22 @@ class WardenKohanaDependencyFactory
                         ],
                     ],
                     'profile'      => [
+                        'change_email' => [
+                            '_settings' => [
+                                'class'     => \Ingenerator\Warden\UI\Kohana\View\ChangeEmailView::class,
+                                'arguments' => [
+                                    '%view.layout.default%',
+                                ],
+                            ],
+                        ],
+                        'change_password' => [
+                            '_settings' => [
+                                'class'     => \Ingenerator\Warden\UI\Kohana\View\ChangePasswordView::class,
+                                'arguments' => [
+                                    '%view.layout.default%',
+                                ],
+                            ],
+                        ],
                         'profile' => [
                             '_settings' => [
                                 'class'     => \Ingenerator\Warden\UI\Kohana\View\ProfileView::class,
@@ -213,6 +284,34 @@ class WardenKohanaDependencyFactory
     public static function controllerDefinitions(array $only_controllers = NULL)
     {
         $controllers = [
+            ChangeEmailController::class             => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.email_verification%',
+                '%warden.view.profile.change_email%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
+                '%kohana.psr_log%',
+            ],
+            ChangePasswordController::class => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.change_password%',
+                '%warden.view.profile.change_password%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
+                '%kohana.psr_log%',
+            ],
+            CompleteActivateAccountController::class => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.activate_account%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
+            ],
+            CompleteChangeEmailController::class => [
+                '%warden.support.interactor_request_factory%',
+                '%warden.interactor.change_email%',
+                '%warden.support.url_provider%',
+                '%warden.user_session.session%',
+            ],
             LoginController::class         => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.interactor.login%',
@@ -252,6 +351,7 @@ class WardenKohanaDependencyFactory
                 '%warden.view.registration.email_verification%',
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
+                '%kohana.psr_log%',
             ],
         ];
 

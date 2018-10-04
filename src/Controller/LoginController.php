@@ -13,7 +13,10 @@ use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
+use Ingenerator\Warden\UI\Kohana\Message\Authentication\AccountNotActiveMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\IncorrectPasswordMessage;
+use Ingenerator\Warden\UI\Kohana\Message\Authentication\LoginEmailVerificationFailedMessage;
+use Ingenerator\Warden\UI\Kohana\Message\Authentication\LoginRateLimitedMessage;
 use Ingenerator\Warden\UI\Kohana\Message\Authentication\UnregisteredUserMessage;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
 use Psr\Log\LoggerInterface;
@@ -26,7 +29,7 @@ class LoginController extends WardenBaseController
     protected $interactor;
 
     /**
-     * @var \Psr\Log\LoggerInterface 
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -102,17 +105,40 @@ class LoginController extends WardenBaseController
                 $this->handleLoginNotRegistered($result);
                 break;
 
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case LoginResponse::ERROR_PASSWORD_INCORRECT_RESET_THROTTLED:
+                $this->logThrottledEmailVerification($result, 'reset');
+            // Continue to the next step - no particular need for the user to know
             case LoginResponse::ERROR_PASSWORD_INCORRECT:
                 $this->handleLoginInvalidPassword($result);
                 break;
 
             case LoginResponse::ERROR_DETAILS_INVALID:
-                $this->displayLoginForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
+                $this->displayLoginForm(
+                    new Fieldset($this->request->post(), $result->getValidationErrors())
+                );
                 break;
 
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case LoginResponse::ERROR_NOT_ACTIVE_ACTIVATION_THROTTLED:
+                $this->logThrottledEmailVerification($result, 'activation');
+            // Continue to the next step - no particular need for the user to know
             case LoginResponse::ERROR_NOT_ACTIVE:
+                $this->handleLoginInactiveAccount($result);
+                break;
+
+            case LoginResponse::ERROR_EMAIL_VERIFICATION_FAILED:
+                $this->handleLoginEmailVerificationFailed($result);
+                break;
+
+            case LoginResponse::ERROR_RATE_LIMITED:
+                $this->handleLoginRateLimited($result);
+                break;
+
             default:
-                throw new \UnexpectedValueException('Unexpected login failure: '.$result->getFailureCode());
+                throw new \UnexpectedValueException(
+                    'Unexpected login failure: '.$result->getFailureCode()
+                );
         }
     }
 
@@ -125,7 +151,60 @@ class LoginController extends WardenBaseController
     protected function handleLoginInvalidPassword(LoginResponse $result)
     {
         $this->getPigeonhole()->add(new IncorrectPasswordMessage($result->getEmail()));
-        $this->displayLoginForm(new Fieldset(['email' => $result->getEmail()], ['password' => 'Incorrect password']));
+        $this->displayLoginForm(
+            new Fieldset(['email' => $result->getEmail()], ['password' => 'Incorrect password'])
+        );
+    }
+
+    protected function handleLoginEmailVerificationFailed(LoginResponse $result)
+    {
+        $this->logger->warning(
+            sprintf(
+                'Could not send verification to existing user %s: email currently invalid',
+                $result->getEmail()
+            )
+        );
+        $this->getPigeonhole()->add(new LoginEmailVerificationFailedMessage($result->getEmail()));
+        $this->displayLoginForm(
+            new Fieldset(
+                ['email' => $result->getEmail()],
+                [
+                    'email'    => 'We can\'t contact your email server at the moment',
+                    'password' => 'Incorrect password'
+                ]
+            )
+        );
+    }
+
+    protected function logThrottledEmailVerification(LoginResponse $result, $type)
+    {
+        $this->logger->debug(
+            sprintf(
+                'Skipped sending %s to %s (rate limit will clear %s)',
+                $type,
+                $result->getEmail(),
+                $result->canRetryAfter()->format(\DateTime::ATOM)
+            )
+        );
+    }
+
+    protected function handleLoginInactiveAccount(LoginResponse $result)
+    {
+        $this->getPigeonhole()->add(new AccountNotActiveMessage($result->getEmail()));
+        $this->displayLoginForm(new Fieldset(['email' => $result->getEmail()], []));
+    }
+
+    protected function handleLoginRateLimited(LoginResponse $result)
+    {
+        $this->getPigeonhole()->add(new LoginRateLimitedMessage);
+        $this->logger->warning(
+            sprintf(
+                'Login denied - rate limited (%s) - will reset %s',
+                $result->getFailureDetail(),
+                $result->canRetryAfter()->format(\DateTime::ATOM)
+            )
+        );
+        $this->displayLoginForm(new Fieldset($this->request->post(), []));
     }
 
 

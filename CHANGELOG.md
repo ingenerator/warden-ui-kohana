@@ -1,5 +1,29 @@
 ### Unreleased
 
+### v0.4.0 (2018-10-04)
+
+* [Feature]  Support global and per-account rate limiting of login attempts. Customise the
+  warden.login.global and warden.login.user bucket_types in config/warden.php to set 
+  site-specific limits.
+* [Feature]  Pre-validate registration and password reset links and show the user an error
+  immediately rather than on save if the link they're using has expired.
+* [Feature]  Handle cases where a user's email fails MX validation at time of login and 
+  a password reset / activation therefore cannot be sent.
+* [Feature]  Provide `LastLoginTrackingUser` interface to identify entities that have a 
+  property(/ies) that should be updated every time the user logs in - for example last login
+  time. Apply this to your entity to have KohanaUserSession update and persist the user on
+  every login.
+* [Feature]  Handle `inactive account` response on login and add controller etc to handle
+  users clicking through on activation links.
+* [Feature]  Add controller etc for authenticated user to change their own password.
+* [BREAKING] Add optional controller endpoints for triggering and completing change to a 
+  verified new user email address. If you don't want to expose this, set route_controller to 
+  FALSE for the `change-email` and `complete-change-email` actions in config/warden.php 
+* [Feature]  Handle and log rate-limited email verification attempts for login and registration
+* [BREAKING] Update dependency definitions for rate-limiting in warden-core 
+* [BREAKING] Update user repository and notification mailer interfaces in line 
+  with warden-core 0.3. 
+
 ### v0.3.3 (2018-09-26)
 
 * Log all failed logins

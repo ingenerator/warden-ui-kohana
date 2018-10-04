@@ -8,16 +8,18 @@ namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
 use Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor;
+use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
-use Ingenerator\Warden\UI\Kohana\Message\Register\EmailVerificationSentMessage;
-use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
+use Ingenerator\Warden\UI\Kohana\Message\ChangeEmail\NewEmailAlreadyRegisteredMessage;
+use Ingenerator\Warden\UI\Kohana\Message\ChangeEmail\VerifyNewEmailLinkSentMessage;
+use Ingenerator\Warden\UI\Kohana\View\ChangeEmailView;
 use Psr\Log\LoggerInterface;
 
-class VerifyEmailController extends WardenBaseController
+class ChangeEmailController extends WardenBaseController
 {
     /**
      * @var EmailVerificationInteractor
@@ -35,9 +37,9 @@ class VerifyEmailController extends WardenBaseController
     protected $urls;
 
     /**
-     * @var EmailVerificationView
+     * @var \Ingenerator\Warden\UI\Kohana\View\ChangeEmailView
      */
-    protected $verify_view;
+    protected $form_view;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -47,7 +49,7 @@ class VerifyEmailController extends WardenBaseController
     public function __construct(
         InteractorRequestFactory $rq_factory,
         EmailVerificationInteractor $email_interactor,
-        EmailVerificationView $verify_view,
+        ChangeEmailView $form_view,
         UrlProvider $urls,
         UserSession $session,
         LoggerInterface $logger
@@ -56,33 +58,44 @@ class VerifyEmailController extends WardenBaseController
         $this->urls             = $urls;
         $this->session          = $session;
         $this->email_interactor = $email_interactor;
-        $this->verify_view      = $verify_view;
+        $this->form_view        = $form_view;
         $this->logger           = $logger;
     }
 
     public function before()
     {
         parent::before();
-        $this->redirectHomeIfLoggedIn($this->session, $this->urls);
+        if ( ! $this->session->isAuthenticated()) {
+            $this->redirect($this->urls->getLoginUrl());
+        }
+    }
+
+    protected function getUserToUpdate()
+    {
+        return $this->session->getUser();
     }
 
     public function action_get()
     {
-        $this->displayEmailVerificationForm(new Fieldset(['email' => $this->request->query('email')], []));
+        $this->displayEmailVerificationForm(new Fieldset([], []));
     }
 
     protected function displayEmailVerificationForm(Fieldset $fieldset)
     {
-        $this->verify_view->display(['fields' => $fieldset]);
-        $this->respondPageContent($this->verify_view);
+        $this->form_view->display(
+            [
+                'fields' => $fieldset,
+                'user'   => $this->getUserToUpdate(),
+            ]
+        );
+        $this->respondPageContent($this->form_view);
     }
 
     public function action_post()
     {
         $result = $this->email_interactor->execute(
-            $this->makeInteractorRequest(
-                'email_verification',
-                'forRegistration',
+            EmailVerificationRequest::forChangeEmail(
+                $this->getUserToUpdate(),
                 $this->request->post('email')
             )
         );
@@ -96,29 +109,36 @@ class VerifyEmailController extends WardenBaseController
 
     protected function handleEmailVerificationSent(EmailVerificationResponse $result)
     {
-        $this->getPigeonhole()->add(new EmailVerificationSentMessage($result->getEmail()));
+        $this->getPigeonhole()->add(new VerifyNewEmailLinkSentMessage($result->getEmail()));
         $this->redirect($this->urls->getAfterVerifyEmailSentUrl());
     }
 
     protected function handleEmailVerificationFailed(EmailVerificationResponse $result)
     {
         if ($result->isFailureCode(EmailVerificationResponse::ERROR_RATE_LIMITED)) {
-            $this->handleThrottledRegisterAttempt($result);
+            $this->handleThrottledChangeEmailAttempt($result);
+
         } elseif ($result->isFailureCode(EmailVerificationResponse::ERROR_ALREADY_REGISTERED)) {
-            $this->handleRegisterAttemptForExistingUser($this->urls, $result->getEmail());
+            $this->getPigeonhole()->add(new NewEmailAlreadyRegisteredMessage($result->getEmail()));
+            $this->displayEmailVerificationForm(new Fieldset($this->request->post(), []));
+
         } elseif ($result->isFailureCode(EmailVerificationResponse::ERROR_DETAILS_INVALID)) {
-            $this->displayEmailVerificationForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
+            $this->displayEmailVerificationForm(
+                new Fieldset($this->request->post(), $result->getValidationErrors())
+            );
         } else {
-            throw new \UnexpectedValueException('Unexpected email verification failure: '.$result->getFailureCode());
+            throw new \UnexpectedValueException(
+                'Unexpected email verification failure: '.$result->getFailureCode()
+            );
         }
     }
 
 
-    protected function handleThrottledRegisterAttempt(EmailVerificationResponse $result)
+    protected function handleThrottledChangeEmailAttempt(EmailVerificationResponse $result)
     {
         $this->logger->debug(
             sprintf(
-                'Skipped sending verification to %s (rate limit will clear %s)',
+                'Skipped sending change-email to %s (rate limit will clear %s)',
                 $result->getEmail(),
                 $result->canRetryAfter()->format(\DateTime::ATOM)
             )
