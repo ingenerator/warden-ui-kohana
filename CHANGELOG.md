@@ -1,5 +1,7 @@
 ### Unreleased
 
+### v0.4.0 (2018-10-04)
+
 * [Feature]  Support global and per-account rate limiting of login attempts. Customise the
   warden.login.global and warden.login.user bucket_types in config/warden.php to set 
   site-specific limits.
