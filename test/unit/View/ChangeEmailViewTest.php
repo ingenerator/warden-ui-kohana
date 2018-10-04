@@ -28,14 +28,13 @@ class ChangeEmailViewTest extends AbstractFormViewTest
      */
     public function test_it_throws_if_user_is_not_a_user()
     {
-        $this->newSubject()->display(['user' => 'string']);
+        $this->newSubjectDisplaying(['user' => 'string']);
     }
 
     public function test_it_exposes_user_variable()
     {
         $user = new SimpleUser();
-        $subject = $this->newSubject();
-        $subject->display(['user' => $user]);
+        $subject = $this->newSubjectDisplaying(['user' => $user]);
         $this->assertSame($user, $subject->user);
     }
 
@@ -43,5 +42,11 @@ class ChangeEmailViewTest extends AbstractFormViewTest
     {
         return new ChangeEmailView(new DummyPageLayoutView);
     }
+
+    protected function newSubjectDisplaying(array $custom_vars)
+    {
+        return parent::newSubjectDisplaying(array_merge(['user' => new SimpleUser], $custom_vars));
+    }
+
 
 }
