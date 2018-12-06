@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v0.4.1 (2018-12-06)
+
+* Support kohana-extras 0.4 release (merge-up of 0.3.4 release)
+
 ### v0.4.0 (2018-10-04)
 
 * [Feature]  Support global and per-account rate limiting of login attempts. Customise the
@@ -23,6 +27,10 @@
 * [BREAKING] Update dependency definitions for rate-limiting in warden-core 
 * [BREAKING] Update user repository and notification mailer interfaces in line 
   with warden-core 0.3. 
+
+### v0.3.4 (2018-12-06)
+
+* Support kohana-extras 0.4 release
 
 ### v0.3.3 (2018-09-26)
 
