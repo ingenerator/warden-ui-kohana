@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v0.3.4 (2018-12-06)
+
+* Support kohana-extras 0.4 release
+
 ### v0.3.3 (2018-09-26)
 
 * Log all failed logins

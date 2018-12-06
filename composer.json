@@ -18,7 +18,7 @@
     "ingenerator/warden-validator-symfony": "^0.1",
     "ingenerator/warden-persistence-doctrine": "^0.1",
     "ingenerator/kohana-view": "^4.0",
-    "ingenerator/kohana-extras": "^0.3",
+    "ingenerator/kohana-extras": "^0.3||^0.4",
     "ingenerator/kohana-core": "^4.1",
     "ingenerator/tokenista": "^1.1",
     "swiftmailer/swiftmailer": "^5.4"
