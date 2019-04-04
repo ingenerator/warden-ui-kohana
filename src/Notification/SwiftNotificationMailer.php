@@ -42,7 +42,7 @@ class SwiftNotificationMailer implements UserNotificationMailer
         if ($notification instanceof ConfirmationRequiredNotification) {
             $this->sendConfirmationRequired($notification);
         } else {
-            throw new \InvalidArgumentException('Unsupported notification type '.get_class($notification));
+            throw new \InvalidArgumentException('Unsupported notification type '.\get_class($notification));
         }
     }
 

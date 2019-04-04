@@ -12,7 +12,7 @@ use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 use Ingenerator\Warden\Core\Entity\SimpleUser;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class ProfileViewTest extends \PHPUnit_Framework_TestCase
+class ProfileViewTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_it_is_initialisable()

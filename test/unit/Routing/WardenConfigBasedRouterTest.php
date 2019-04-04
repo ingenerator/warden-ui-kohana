@@ -12,7 +12,7 @@ use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter;
 use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
 
-class WardenConfigBasedRouterTest extends \PHPUnit_Framework_TestCase
+class WardenConfigBasedRouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -76,7 +76,7 @@ class WardenConfigBasedRouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->config[$key]['url'] = '/shiny-page';
         $subject                   = $this->newSubject();
-        $result                    = call_user_func_array([$subject, $method], $args);
+        $result                    = \call_user_func_array([$subject, $method], $args);
         $this->assertEquals(\URL::site($expect), $result);
     }
 

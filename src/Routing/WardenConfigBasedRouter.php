@@ -104,7 +104,7 @@ class WardenConfigBasedRouter implements UrlProvider
 
     public function getLoginUrl($email = NULL)
     {
-        return $this->requireConfigUrl('login', array_filter(['email' => $email]));
+        return $this->requireConfigUrl('login', \array_filter(['email' => $email]));
     }
 
     public function getLogoutUrl()
@@ -114,7 +114,7 @@ class WardenConfigBasedRouter implements UrlProvider
 
     public function getRegisterVerifyEmailUrl($email = NULL)
     {
-        return $this->requireConfigUrl('register-verify-email', array_filter(['email' => $email]));
+        return $this->requireConfigUrl('register-verify-email', \array_filter(['email' => $email]));
     }
 
     protected function requireConfigUrl($key, array $params = [])
@@ -127,7 +127,7 @@ class WardenConfigBasedRouter implements UrlProvider
 
         $base_url = \URL::site($this->url_config[$key]['url']);
         if ($params) {
-            return $base_url.'?'.http_build_query($params);
+            return $base_url.'?'.\http_build_query($params);
         } else {
             return $base_url;
         }
@@ -152,7 +152,7 @@ class WardenConfigBasedRouter implements UrlProvider
 
             HttpMethodRoute::createExplicit(
                 'warden-'.$key,
-                ltrim($config['url'], '/'),
+                \ltrim($config['url'], '/'),
                 $config['route_controller']
             );
         }

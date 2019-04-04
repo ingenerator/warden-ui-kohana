@@ -45,7 +45,7 @@ class ChangeEmailViewTest extends AbstractFormViewTest
 
     protected function newSubjectDisplaying(array $custom_vars)
     {
-        return parent::newSubjectDisplaying(array_merge(['user' => new SimpleUser], $custom_vars));
+        return parent::newSubjectDisplaying(\array_merge(['user' => new SimpleUser], $custom_vars));
     }
 
 

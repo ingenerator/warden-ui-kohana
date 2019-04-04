@@ -8,24 +8,30 @@
     {
       "name": "Andrew Coulton",
       "email": "andrew@ingenerator.com",
-      "homepage": "http://ingenerator.com"
+      "homepage": "https://ingenerator.com"
+    },
+    {
+      "name": "Craig Gosman",
+      "email": "craig@ingenerator.com",
+      "homepage": "https://ingenerator.com"
     }
   ],
   "require": {
-    "php": "^5.5||^7.2",
+    "php": "^7.2",
     "symfony/validator": "^3.0",
-    "ingenerator/warden-core": "^0.3",
-    "ingenerator/warden-validator-symfony": "^0.1",
-    "ingenerator/warden-persistence-doctrine": "^0.2",
-    "ingenerator/kohana-view": "^4.0",
-    "ingenerator/kohana-extras": "^0.3||^0.4",
-    "ingenerator/kohana-core": "^4.1",
-    "ingenerator/tokenista": "^1.1",
+    "ingenerator/warden-core": "^1.0",
+    "ingenerator/warden-validator-symfony": "^1.0",
+    "ingenerator/warden-persistence-doctrine": "^1.0",
+    "ingenerator/kohana-view": "^4.3",
+    "ingenerator/kohana-extras": "^1.0",
+    "ingenerator/kohana-core": "^4.3",
+    "ingenerator/tokenista": "^1.2",
     "swiftmailer/swiftmailer": "^5.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.8",
-    "kohana/koharness": "*@dev"
+    "phpunit/phpunit": "^7.0",
+    "kohana/koharness": "*@dev",
+    "johnkary/phpunit-speedtrap": "^3.0"
   },
   "repositories": [
     {
