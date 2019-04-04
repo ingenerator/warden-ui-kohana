@@ -117,7 +117,7 @@ class VerifyEmailController extends WardenBaseController
     protected function handleThrottledRegisterAttempt(EmailVerificationResponse $result)
     {
         $this->logger->debug(
-            sprintf(
+            \sprintf(
                 'Skipped sending verification to %s (rate limit will clear %s)',
                 $result->getEmail(),
                 $result->canRetryAfter()->format(\DateTime::ATOM)

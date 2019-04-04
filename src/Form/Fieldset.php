@@ -47,12 +47,12 @@ class Fieldset implements \ArrayAccess
 
     public function offsetSet($offset, $value)
     {
-        throw new \BadMethodCallException(get_class($this).' is immutable, cannot call '.__METHOD__);
+        throw new \BadMethodCallException(\get_class($this).' is immutable, cannot call '.__METHOD__);
     }
 
     public function offsetUnset($offset)
     {
-        throw new \BadMethodCallException(get_class($this).' is immutable, cannot call '.__METHOD__);
+        throw new \BadMethodCallException(\get_class($this).' is immutable, cannot call '.__METHOD__);
     }
 
 }

@@ -137,7 +137,7 @@ class ChangeEmailController extends WardenBaseController
     protected function handleThrottledChangeEmailAttempt(EmailVerificationResponse $result)
     {
         $this->logger->debug(
-            sprintf(
+            \sprintf(
                 'Skipped sending change-email to %s (rate limit will clear %s)',
                 $result->getEmail(),
                 $result->canRetryAfter()->format(\DateTime::ATOM)

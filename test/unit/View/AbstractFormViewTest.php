@@ -40,7 +40,7 @@ abstract class AbstractFormViewTest extends \PHPUnit\Framework\TestCase
      */
     protected function newSubjectDisplaying(array $custom_vars)
     {
-        $vars    = array_merge(['fields' => new Fieldset([], [])], $custom_vars);
+        $vars    = \array_merge(['fields' => new Fieldset([], [])], $custom_vars);
         $subject = $this->newSubject();
         $subject->display($vars);
         return $subject;

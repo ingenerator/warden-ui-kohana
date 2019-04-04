@@ -97,7 +97,7 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         $definitions = WardenKohanaDependencyFactory::controllerDefinitions($args);
 
         $actual_has = [];
-        foreach (array_keys($expect_has) as $controller) {
+        foreach (\array_keys($expect_has) as $controller) {
             $actual_has[$controller] = isset($definitions['controller']['\\'.$controller]['_settings']);
         }
 
@@ -120,8 +120,8 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function make_dummy_mock_class($class_or_interface)
     {
-        $dummy_name = 'DummyDependency_'.str_replace('\\', '_', $class_or_interface);
-        if ( ! class_exists($dummy_name)) {
+        $dummy_name = 'DummyDependency_'.\str_replace('\\', '_', $class_or_interface);
+        if ( ! \class_exists($dummy_name)) {
             $this->getMockBuilder($class_or_interface)
                 ->setMockClassName($dummy_name.'Raw')
                 ->disableOriginalConstructor()

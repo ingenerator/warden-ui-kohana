@@ -96,7 +96,7 @@ class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
             [
                 '%continuation_url%' => \URL::site('/reset?foo=blah', TRUE),
             ],
-            strtok($message, \PHP_EOL)
+            \strtok($message, \PHP_EOL)
         );
     }
 
@@ -118,7 +118,7 @@ class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
             $found_parts[] = "'".$part->getContentType()."'";
         }
 
-        $this->fail("No '$content_type' part in ".implode($found_parts));
+        $this->fail("No '$content_type' part in ".\implode($found_parts));
     }
 
     /**
@@ -126,7 +126,7 @@ class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
      */
     protected function sendConfirmationRequiredWith($values)
     {
-        $values       = array_merge(
+        $values       = \array_merge(
             [
                 'recipient'         => 'foo@bar.com',
                 'action'            => EmailVerificationRequest::REGISTER,
@@ -191,7 +191,7 @@ class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
 
     public function message($file, $path, array $params = [], $default = NULL)
     {
-        return json_encode(
+        return \json_encode(
             [
                 'file'   => $file,
                 'path'   => $path,
@@ -202,7 +202,7 @@ class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
 
     public function assertIsMessage($file, $path, array $params, $string)
     {
-        $values = json_decode($string, TRUE);
+        $values = \json_decode($string, TRUE);
         \PHPUnit\Framework\Assert::assertEquals(
             [
                 'file'   => $file,

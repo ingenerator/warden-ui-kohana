@@ -159,7 +159,7 @@ class LoginController extends WardenBaseController
     protected function handleLoginEmailVerificationFailed(LoginResponse $result)
     {
         $this->logger->warning(
-            sprintf(
+            \sprintf(
                 'Could not send verification to existing user %s: email currently invalid',
                 $result->getEmail()
             )
@@ -179,7 +179,7 @@ class LoginController extends WardenBaseController
     protected function logThrottledEmailVerification(LoginResponse $result, $type)
     {
         $this->logger->debug(
-            sprintf(
+            \sprintf(
                 'Skipped sending %s to %s (rate limit will clear %s)',
                 $type,
                 $result->getEmail(),
@@ -198,7 +198,7 @@ class LoginController extends WardenBaseController
     {
         $this->getPigeonhole()->add(new LoginRateLimitedMessage);
         $this->logger->warning(
-            sprintf(
+            \sprintf(
                 'Login denied - rate limited (%s) - will reset %s',
                 $result->getFailureDetail(),
                 $result->canRetryAfter()->format(\DateTime::ATOM)
