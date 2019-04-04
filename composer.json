@@ -30,7 +30,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0",
-    "kohana/koharness": "*@dev"
+    "kohana/koharness": "*@dev",
+    "johnkary/phpunit-speedtrap": "^3.0"
   },
   "repositories": [
     {
