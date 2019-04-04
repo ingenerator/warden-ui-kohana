@@ -17,7 +17,7 @@ use Ingenerator\Warden\UI\Kohana\Controller\RegisterController;
 use Ingenerator\Warden\UI\Kohana\DependencyFactory\WardenKohanaDependencyFactory;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class WardenKohanaDependencyFactoryTest extends \PHPUnit_Framework_TestCase
+class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function provider_service_names()

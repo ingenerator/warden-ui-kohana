@@ -10,7 +10,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 
-abstract class AbstractFormViewTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractFormViewTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

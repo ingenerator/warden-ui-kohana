@@ -12,7 +12,7 @@ use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter;
 use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
 
-class WardenConfigBasedRouterTest extends \PHPUnit_Framework_TestCase
+class WardenConfigBasedRouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

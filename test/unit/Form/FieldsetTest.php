@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\Form;
 
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 
-class FieldsetTest extends \PHPUnit_Framework_TestCase
+class FieldsetTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_it_is_initialisable_array_access()

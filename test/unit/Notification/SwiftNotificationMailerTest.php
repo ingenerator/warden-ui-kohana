@@ -15,7 +15,7 @@ use Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer;
 use Swift_Message;
 use Swift_Mime_Message;
 
-class SwiftNotificationMailerTest extends \PHPUnit_Framework_TestCase
+class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
 {
     protected $config = [
         'email_sender'      => 'foo@warden.net',
@@ -176,9 +176,9 @@ class SpyingSwiftMailer extends \Swift_Mailer
      */
     public function assertSentOne()
     {
-        \PHPUnit_Framework_Assert::assertCount(1, $this->mails);
+        \PHPUnit\Framework\Assert::assertCount(1, $this->mails);
         $message = $this->mails[0];
-        \PHPUnit_Framework_Assert::assertInstanceOf(Swift_Message::class, $message);
+        \PHPUnit\Framework\Assert::assertInstanceOf(Swift_Message::class, $message);
 
         return $message;
     }
@@ -203,7 +203,7 @@ class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
     public function assertIsMessage($file, $path, array $params, $string)
     {
         $values = json_decode($string, TRUE);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             [
                 'file'   => $file,
                 'path'   => $path,
