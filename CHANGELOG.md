@@ -1,5 +1,8 @@
 ### Unreleased
 
+* Add LogMetadataProvider to include logged-in user email in app and request logs
+* Now requires kohana-extras:2.x for enhanced logging support
+
 ### v1.0.0 (2018-04-04)
 
 * Ensure support for php7.2
