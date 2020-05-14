@@ -1,5 +1,7 @@
 ### Unreleased
 
+### v1.1.0-beta1 (2020-05-14)
+
 * Add LogMetadataProvider to include logged-in user email in app and request logs
 * Now requires kohana-extras:2.x for enhanced logging support
 
