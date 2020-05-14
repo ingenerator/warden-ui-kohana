@@ -64,7 +64,7 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $container->get($service_name);
+        $this->assertNotNull($container->get($service_name));
     }
 
     public function provider_controller_subsets()
