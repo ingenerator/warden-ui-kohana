@@ -12,10 +12,12 @@ use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;
 use Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Swift_Mime_Message;
 
-class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
+class SwiftNotificationMailerTest extends TestCase
 {
     protected $config = [
         'email_sender'      => 'foo@warden.net',
@@ -39,11 +41,9 @@ class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('Ingenerator\Warden\Core\Notification\UserNotificationMailer', $subject);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_on_unsupported_notification_type()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->newSubject()->sendWardenNotification(
             $this->getMockBuilder(UserNotification::class)->disableOriginalConstructor()->getMock()
         );
@@ -142,7 +142,7 @@ class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
         $this->newSubject()->sendWardenNotification($notification);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mailer   = new SpyingSwiftMailer;

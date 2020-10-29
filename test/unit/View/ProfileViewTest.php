@@ -10,6 +10,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 use Ingenerator\Warden\Core\Entity\SimpleUser;
+use InvalidArgumentException;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class ProfileViewTest extends \PHPUnit\Framework\TestCase
@@ -22,11 +23,9 @@ class ProfileViewTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(PageContentView::class, $subject);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_if_user_is_not_a_user()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->newSubject()->display(['user' => 'string']);
     }
 

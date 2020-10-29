@@ -9,15 +9,16 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use function array_merge;
 
-abstract class AbstractFormViewTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractFormViewTest extends TestCase
 {
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_if_fields_is_not_a_fieldset()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->newSubjectDisplaying(['fields' => 'random stuff']);
     }
 
@@ -40,7 +41,7 @@ abstract class AbstractFormViewTest extends \PHPUnit\Framework\TestCase
      */
     protected function newSubjectDisplaying(array $custom_vars)
     {
-        $vars    = \array_merge(['fields' => new Fieldset([], [])], $custom_vars);
+        $vars    = array_merge(['fields' => new Fieldset([], [])], $custom_vars);
         $subject = $this->newSubject();
         $subject->display($vars);
         return $subject;
