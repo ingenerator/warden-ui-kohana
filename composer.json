@@ -29,7 +29,7 @@
     "swiftmailer/swiftmailer": "^5.4"
   },
   "require-dev": {
-    "kohana/koharness": "*@dev",
+    "kohana/koharness": "dev-master",
     "johnkary/phpunit-speedtrap": "^3.0",
     "phpunit/phpunit": "^9.0"
   },
