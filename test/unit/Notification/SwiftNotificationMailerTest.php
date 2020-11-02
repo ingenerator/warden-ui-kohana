@@ -11,11 +11,16 @@ use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;
+use Ingenerator\Warden\Core\Notification\UserNotificationMailer;
 use Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer;
 use InvalidArgumentException;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
+use function json_decode;
+use function json_encode;
 
 class SwiftNotificationMailerTest extends TestCase
 {
@@ -37,8 +42,8 @@ class SwiftNotificationMailerTest extends TestCase
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer', $subject);
-        $this->assertInstanceOf('Ingenerator\Warden\Core\Notification\UserNotificationMailer', $subject);
+        $this->assertInstanceOf(SwiftNotificationMailer::class, $subject);
+        $this->assertInstanceOf(UserNotificationMailer::class, $subject);
     }
 
     public function test_it_throws_on_unsupported_notification_type()
@@ -160,13 +165,13 @@ class SwiftNotificationMailerTest extends TestCase
 class SpyingSwiftMailer extends \Swift_Mailer
 {
     /**
-     * @var \Swift_Mime_Message[]
+     * @var \Swift_Mime_SimpleMessage[]
      */
     protected $mails = [];
 
     public function __construct() { }
 
-    public function send(Swift_Mime_Message $message, &$failedRecipients = NULL)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = NULL)
     {
         $this->mails[] = $message;
     }
@@ -176,9 +181,9 @@ class SpyingSwiftMailer extends \Swift_Mailer
      */
     public function assertSentOne()
     {
-        \PHPUnit\Framework\Assert::assertCount(1, $this->mails);
+        Assert::assertCount(1, $this->mails);
         $message = $this->mails[0];
-        \PHPUnit\Framework\Assert::assertInstanceOf(Swift_Message::class, $message);
+        Assert::assertInstanceOf(Swift_Message::class, $message);
 
         return $message;
     }
@@ -191,7 +196,7 @@ class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
 
     public function message($file, $path, array $params = [], $default = NULL)
     {
-        return \json_encode(
+        return json_encode(
             [
                 'file'   => $file,
                 'path'   => $path,
@@ -202,8 +207,8 @@ class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
 
     public function assertIsMessage($file, $path, array $params, $string)
     {
-        $values = \json_decode($string, TRUE);
-        \PHPUnit\Framework\Assert::assertEquals(
+        $values = json_decode($string, TRUE);
+        Assert::assertEquals(
             [
                 'file'   => $file,
                 'path'   => $path,
