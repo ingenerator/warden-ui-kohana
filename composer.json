@@ -27,7 +27,7 @@
     "ingenerator/kohana-extras": "^2.0",
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/tokenista": "^1.4",
-    "swiftmailer/swiftmailer": "^6.0",
+    "swiftmailer/swiftmailer": "^6.2.3",
     "composer/installers": "^1.9"
   },
   "require-dev": {
