@@ -14,6 +14,7 @@ use Ingenerator\Warden\Core\Notification\UserNotification;
 use Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer;
 use Swift_Message;
 use Swift_Mime_Message;
+use Swift_Mime_SimpleMessage;
 
 class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
 {
@@ -160,13 +161,13 @@ class SwiftNotificationMailerTest extends \PHPUnit\Framework\TestCase
 class SpyingSwiftMailer extends \Swift_Mailer
 {
     /**
-     * @var \Swift_Mime_Message[]
+     * @var \Swift_Mime_SimpleMessage[]
      */
     protected $mails = [];
 
     public function __construct() { }
 
-    public function send(Swift_Mime_Message $message, &$failedRecipients = NULL)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = NULL)
     {
         $this->mails[] = $message;
     }

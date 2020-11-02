@@ -69,7 +69,7 @@ class SwiftNotificationMailer implements UserNotificationMailer
      */
     protected function newEmailToRecipient(UserNotification $notification)
     {
-        $mail = \Swift_Message::newInstance();
+        $mail = new \Swift_Message();
         $mail->setFrom($this->email_config['email_sender'], $this->email_config['email_sender_name']);
         $mail->setTo($notification->getRecipientEmail());
 
