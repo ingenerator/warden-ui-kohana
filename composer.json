@@ -33,7 +33,8 @@
   "require-dev": {
     "kohana/koharness": "dev-master",
     "johnkary/phpunit-speedtrap": "^3.0",
-    "phpunit/phpunit": "^9.0"
+    "phpunit/phpunit": "^9.0",
+    "egulias/email-validator": "^2.1.16"
   },
   "repositories": [
     {
