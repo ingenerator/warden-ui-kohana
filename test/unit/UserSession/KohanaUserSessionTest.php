@@ -47,7 +47,7 @@ class KohanaUserSessionTest extends UserSessionTest
         $this->user_repository = $this->getMockBuilder(UserRepository::class)->getMock();
         $this->user_repository->expects($this->once())->method('save')->with($user);
         $this->newSubject()->login($user);
-        $this->assertEquals(new \DateTimeImmutable, $user->getLastLogin(), 'Should have login', 1);
+        $this->assertEqualsWithDelta(new \DateTimeImmutable, $user->getLastLogin(), 1, 'Should have login');
         $this->assertSame(16, $user->getLoginCount(), 'Should be called once');
     }
 
@@ -102,7 +102,7 @@ class KohanaUserSessionTest extends UserSessionTest
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->session_driver  = new \Session_Array;

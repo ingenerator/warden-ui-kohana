@@ -10,9 +10,12 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\Routing;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter;
+use InvalidArgumentException;
+use OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
 use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
 
-class WardenConfigBasedRouterTest extends \PHPUnit\Framework\TestCase
+class WardenConfigBasedRouterTest extends TestCase
 {
     /**
      * @var array
@@ -26,12 +29,9 @@ class WardenConfigBasedRouterTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(UrlProvider::class, $subject);
     }
 
-
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function test_it_throws_if_attempting_to_access_url_defined_as_null()
     {
+        $this->expectException(OutOfBoundsException::class);
         $this->config['after-logout']['url'] = NULL;
         $this->newSubject()->getAfterLogoutUrl();
     }
@@ -129,21 +129,19 @@ class WardenConfigBasedRouterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_if_routing_controller_with_no_url()
     {
         try {
             $old_routes                   = RouteStateAccess::reset([]);
             $this->config['after-logout'] = ['url' => FALSE, 'route_controller' => static::class];
+            $this->expectException(InvalidArgumentException::class);
             $this->newSubject()->registerGlobalRoutes();
         } finally {
             RouteStateAccess::reset($old_routes);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $config       = require(__DIR__.'/../../../config/warden.php');

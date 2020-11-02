@@ -11,12 +11,14 @@ use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;
 use Ingenerator\Warden\Core\Notification\UserNotificationMailer;
+use Swift_Mailer;
+use Swift_Message;
 
 class SwiftNotificationMailer implements UserNotificationMailer
 {
     const MESSAGE_FILE = 'user_notification_mail';
     /**
-     * @var \Swift_Mailer
+     * @var Swift_Mailer
      */
     protected $mailer;
 
@@ -26,17 +28,20 @@ class SwiftNotificationMailer implements UserNotificationMailer
     protected $email_config;
 
     /**
-     * @var \Ingenerator\KohanaExtras\Message\KohanaMessageProvider
+     * @var KohanaMessageProvider
      */
     protected $messages;
 
-    public function __construct(\Swift_Mailer $mailer, KohanaMessageProvider $messages, array $email_config)
+    public function __construct(Swift_Mailer $mailer, KohanaMessageProvider $messages, array $email_config)
     {
         $this->mailer       = $mailer;
         $this->email_config = $email_config;
         $this->messages     = $messages;
     }
 
+    /**
+     * @param UserNotification $notification
+     */
     public function sendWardenNotification(UserNotification $notification)
     {
         if ($notification instanceof ConfirmationRequiredNotification) {
@@ -46,6 +51,9 @@ class SwiftNotificationMailer implements UserNotificationMailer
         }
     }
 
+    /**
+     * @param ConfirmationRequiredNotification $notification
+     */
     protected function sendConfirmationRequired(ConfirmationRequiredNotification $notification)
     {
         $mail = $this->newEmailToRecipient($notification);
@@ -65,11 +73,13 @@ class SwiftNotificationMailer implements UserNotificationMailer
     }
 
     /**
-     * @return \Swift_Message
+     * @param UserNotification $notification
+     *
+     * @return Swift_Message
      */
     protected function newEmailToRecipient(UserNotification $notification)
     {
-        $mail = \Swift_Message::newInstance();
+        $mail = new Swift_Message();
         $mail->setFrom($this->email_config['email_sender'], $this->email_config['email_sender_name']);
         $mail->setTo($notification->getRecipientEmail());
 

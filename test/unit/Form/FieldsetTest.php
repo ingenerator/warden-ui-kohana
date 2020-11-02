@@ -7,9 +7,11 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\Form;
 
 
+use BadMethodCallException;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
+use PHPUnit\Framework\TestCase;
 
-class FieldsetTest extends \PHPUnit\Framework\TestCase
+class FieldsetTest extends TestCase
 {
 
     public function test_it_is_initialisable_array_access()
@@ -19,19 +21,15 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('ArrayAccess', $subject);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function test_it_throws_on_unset()
     {
+        $this->expectException(BadMethodCallException::class);
         unset($this->newSubject()['field']);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function test_it_throws_on_set()
     {
+        $this->expectException(BadMethodCallException::class);
         $this->newSubject()['field'] = 'foo';
     }
 
@@ -39,7 +37,6 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue(isset($this->newSubject()['anything']));
     }
-
 
     public function test_it_returns_empty_value_for_unknown_field()
     {

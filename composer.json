@@ -17,21 +17,24 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": "^7.4",
+    "ext-json": "*",
     "symfony/validator": "^3.0",
-    "ingenerator/warden-core": "^1.0",
-    "ingenerator/warden-validator-symfony": "^1.0",
-    "ingenerator/warden-persistence-doctrine": "^1.0",
-    "ingenerator/kohana-view": "^4.3",
+    "ingenerator/warden-core": "^1.1",
+    "ingenerator/warden-validator-symfony": "^1.1",
+    "ingenerator/warden-persistence-doctrine": "^1.1",
+    "ingenerator/kohana-view": "^4.4",
     "ingenerator/kohana-extras": "^2.0",
-    "ingenerator/kohana-core": "^4.3",
-    "ingenerator/tokenista": "^1.2",
-    "swiftmailer/swiftmailer": "^5.4"
+    "ingenerator/kohana-core": "^4.7",
+    "ingenerator/tokenista": "^1.4",
+    "swiftmailer/swiftmailer": "^6.2.3",
+    "composer/installers": "^1.9"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.0",
-    "kohana/koharness": "*@dev",
-    "johnkary/phpunit-speedtrap": "^3.0"
+    "kohana/koharness": "dev-master",
+    "johnkary/phpunit-speedtrap": "^3.0",
+    "phpunit/phpunit": "^9.0",
+    "egulias/email-validator": "^2.1.16"
   },
   "repositories": [
     {
@@ -55,5 +58,5 @@
       "vendor/{$vendor}/{$name}": ["type:kohana-module"]
     }
   },
-  "minimum-stability": "beta"
+  "minimum-stability": "stable"
 }

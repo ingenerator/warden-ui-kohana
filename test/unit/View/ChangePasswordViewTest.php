@@ -12,6 +12,7 @@ use Ingenerator\Warden\Core\Entity\SimpleUser;
 use Ingenerator\Warden\UI\Kohana\View\ChangeEmailView;
 use Ingenerator\Warden\UI\Kohana\View\ChangePasswordView;
 use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
+use InvalidArgumentException;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class ChangePasswordViewTest extends AbstractFormViewTest
@@ -24,11 +25,9 @@ class ChangePasswordViewTest extends AbstractFormViewTest
         $this->assertInstanceOf(PageContentView::class, $subject);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_if_user_is_not_a_user()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->newSubjectDisplaying(['user' => 'string']);
     }
 
