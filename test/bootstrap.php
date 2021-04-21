@@ -1,6 +1,10 @@
 <?php
 $_SERVER['KOHANA_ENV'] = 'DEVELOPMENT';
+$_SERVER['HTTP_HOST']  = 'demo.test';
+
 require_once __DIR__.'/../koharness_bootstrap.php';
+
+\Kohana::$config->load('url')->set('trusted_hosts', [$_SERVER['HTTP_HOST']]);
 
 // Require in warden core test bootstrap to autoload mocks and base tests
 require_once __DIR__.'/../vendor/ingenerator/warden-core/test/bootstrap.php';
