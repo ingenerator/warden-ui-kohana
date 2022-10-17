@@ -2,7 +2,7 @@
   "name": "ingenerator/warden-ui-kohana",
   "type": "library",
   "description": "Front-end and kohana application integration for Warden",
-  "homepage": "http://github.com/ingenerator/warden-ui-kohana",
+  "homepage": "https://github.com/ingenerator/warden-ui-kohana",
   "license": "BSD-3-Clause",
   "authors": [
     {
@@ -17,12 +17,12 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ~8.0.0",
+    "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
     "ext-json": "*",
-    "symfony/validator": "^3.0",
-    "ingenerator/warden-core": "^1.1",
-    "ingenerator/warden-validator-symfony": "^1.1",
-    "ingenerator/warden-persistence-doctrine": "^1.1",
+    "symfony/validator": "^5.4",
+    "ingenerator/warden-core": "^1.2",
+    "ingenerator/warden-validator-symfony": "^1.2",
+    "ingenerator/warden-persistence-doctrine": "^1.2",
     "ingenerator/kohana-view": "^4.4",
     "ingenerator/kohana-extras": "^2.0",
     "ingenerator/kohana-core": "^4.7",
@@ -32,8 +32,8 @@
   },
   "require-dev": {
     "kohana/koharness": "dev-master",
-    "johnkary/phpunit-speedtrap": "^3.0",
-    "phpunit/phpunit": "^9.0",
+    "johnkary/phpunit-speedtrap": "^3.3",
+    "phpunit/phpunit": "^9.5.5",
     "egulias/email-validator": "^2.1.16"
   },
   "repositories": [
@@ -43,7 +43,7 @@
     }
   ],
   "suggest": {
-    "zeelot/kohana-dependencies": "Dependency container for kohana"
+    "ingenerator/kohana-dependencies": "Dependency container for kohana"
   },
   "autoload": {
     "psr-4": {
@@ -51,7 +51,10 @@
     }
   },
   "config": {
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "composer/installers": true
+    }
   },
   "extra": {
     "installer-paths": {
