@@ -28,12 +28,12 @@ class Fieldset implements \ArrayAccess
         $this->success_validation_class = empty($this->errors) ? NULL : 'has-success';
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return TRUE;
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): array
     {
         $value = \Arr::get($this->values, $offset);
         $error = \Arr::get($this->errors, $offset);
@@ -45,12 +45,12 @@ class Fieldset implements \ArrayAccess
         ];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new \BadMethodCallException(\get_class($this).' is immutable, cannot call '.__METHOD__);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new \BadMethodCallException(\get_class($this).' is immutable, cannot call '.__METHOD__);
     }
