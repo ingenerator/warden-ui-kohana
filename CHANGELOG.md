@@ -1,5 +1,10 @@
 ### Unreleased
 
+### v1.4.1 (2022-10-24)
+
+* Require warden-validator-symfony ^1.2.1 to be compatible 
+  with warden/core ^1.2.1 to avoid using depreciated checkMX option
+
 ### v1.4.0 (2022-10-17)
 
 * Support PHP 8.1

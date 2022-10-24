@@ -34,7 +34,7 @@
     "kohana/koharness": "dev-master",
     "johnkary/phpunit-speedtrap": "^3.3",
     "phpunit/phpunit": "^9.5.5",
-    "egulias/email-validator": "^2.1.16"
+    "egulias/email-validator": "^3.2"
   },
   "repositories": [
     {
