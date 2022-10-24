@@ -2,6 +2,9 @@
 
 ### v1.3.1 (2022-10-24)
 
+* Bump minimum supported swiftmailer to 6.3.0 and mark a conflict with egulias/email-validator
+  before 3.0 (swiftmailer claims to support the 2.x series but in fact this is broken).
+
 * Remove direct dependency on symfony/validator and (dev) egulias/email-validator -
   these are already required in by dependencies e.g. ingenerator/warden-validator-symfony
   and so we don't actually need to directly require them. These dependencies were
