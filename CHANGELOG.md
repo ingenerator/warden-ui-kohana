@@ -1,5 +1,10 @@
 ### Unreleased
 
+### v1.4.2 (2022-10-24)
+
+* Update 1.4 series with fixes from 1.3.1 (update dependencies / drop direct dependency
+  on symfony/validator and egulias/email-validator)
+
 ### v1.4.1 (2022-10-24)
 
 * Require warden-validator-symfony ^1.2.1 to be compatible
