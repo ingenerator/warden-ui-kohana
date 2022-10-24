@@ -19,7 +19,6 @@
   "require": {
     "php": "^7.4 || ~8.0.0",
     "ext-json": "*",
-    "symfony/validator": "^3.0",
     "ingenerator/warden-core": "^1.1",
     "ingenerator/warden-validator-symfony": "^1.1",
     "ingenerator/warden-persistence-doctrine": "^1.1",
@@ -33,8 +32,7 @@
   "require-dev": {
     "kohana/koharness": "dev-master",
     "johnkary/phpunit-speedtrap": "^3.0",
-    "phpunit/phpunit": "^9.0",
-    "egulias/email-validator": "^2.1.16"
+    "phpunit/phpunit": "^9.0"
   },
   "repositories": [
     {

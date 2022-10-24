@@ -1,5 +1,13 @@
 ### Unreleased
 
+### v1.3.1 (2022-10-24)
+
+* Remove direct dependency on symfony/validator and (dev) egulias/email-validator -
+  these are already required in by dependencies e.g. ingenerator/warden-validator-symfony
+  and so we don't actually need to directly require them. These dependencies were
+  causing conflicts when ingenerator/warden-validator-symfony wanted to pull in a new
+  symfony/validator release as a non-breaking change.
+
 ### v1.3.0 (2021-04-21)
 
 * Support php8.0
