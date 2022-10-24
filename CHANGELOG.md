@@ -2,12 +2,23 @@
 
 ### v1.4.1 (2022-10-24)
 
-* Require warden-validator-symfony ^1.2.1 to be compatible 
+* Require warden-validator-symfony ^1.2.1 to be compatible
   with warden/core ^1.2.1 to avoid using depreciated checkMX option
 
 ### v1.4.0 (2022-10-17)
 
 * Support PHP 8.1
+
+### v1.3.1 (2022-10-24)
+
+* Bump minimum supported swiftmailer to 6.3.0 and mark a conflict with egulias/email-validator
+  before 3.0 (swiftmailer claims to support the 2.x series but in fact this is broken).
+
+* Remove direct dependency on symfony/validator and (dev) egulias/email-validator -
+  these are already required in by dependencies e.g. ingenerator/warden-validator-symfony
+  and so we don't actually need to directly require them. These dependencies were
+  causing conflicts when ingenerator/warden-validator-symfony wanted to pull in a new
+  symfony/validator release as a non-breaking change.
 
 ### v1.3.0 (2021-04-21)
 
