@@ -19,7 +19,6 @@
   "require": {
     "php": "~8.0.0 || ~8.1.0",
     "ext-json": "*",
-    "symfony/validator": "^5.4",
     "ingenerator/warden-core": "^1.2",
     "ingenerator/warden-validator-symfony": "^1.2",
     "ingenerator/warden-persistence-doctrine": "^1.2",
@@ -27,14 +26,16 @@
     "ingenerator/kohana-extras": "^2.0",
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/tokenista": "^1.4",
-    "swiftmailer/swiftmailer": "^6.2.3",
+    "swiftmailer/swiftmailer": "^6.3",
     "composer/installers": "^1.9"
   },
   "require-dev": {
     "kohana/koharness": "dev-master",
     "johnkary/phpunit-speedtrap": "^3.3",
-    "phpunit/phpunit": "^9.5.5",
-    "egulias/email-validator": "^3.2"
+    "phpunit/phpunit": "^9.5.5"
+  },
+  "conflict": {
+    "egulias/email-validator": "<3"
   },
   "repositories": [
     {
