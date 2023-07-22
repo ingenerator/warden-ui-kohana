@@ -15,6 +15,7 @@ use Ingenerator\Tokenista;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\RegisterController;
 use Ingenerator\Warden\UI\Kohana\DependencyFactory\WardenKohanaDependencyFactory;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
@@ -54,7 +55,7 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
                             'kohana.message_provider' => KohanaMessageProvider::class,
                             'kohana.psr_log'          => \PSR\Log\LoggerInterface::class,
                             'kohana.session'          => \Session::class,
-                            'swiftmailer.mailer'      => \Swift_Mailer::class,
+                            'symfonymailer.mailer'      => MailerInterface::class,
                             'tokenista.tokenista'     => Tokenista::class,
                             'validation.validator'    => ValidatorInterface::class,
                             'view.layout.default'     => PageLayoutView::class,

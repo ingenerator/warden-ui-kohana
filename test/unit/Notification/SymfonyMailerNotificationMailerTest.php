@@ -12,27 +12,26 @@ use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;
 use Ingenerator\Warden\Core\Notification\UserNotificationMailer;
-use Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer;
+use Ingenerator\Warden\UI\Kohana\Notification\SymfonyMailerNotificationMailer;
 use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use Swift_Message;
-use Swift_Mime_Message;
-use Swift_Mime_SimpleMessage;
+use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\RawMessage;
 use function json_decode;
 use function json_encode;
 
-class SwiftNotificationMailerTest extends TestCase
+class SymfonyMailerNotificationMailerTest extends TestCase
 {
-    protected $config = [
+    protected array $config = [
         'email_sender'      => 'foo@warden.net',
         'email_sender_name' => 'Warden Emailer',
     ];
 
-    /**
-     * @var SpyingSwiftMailer
-     */
-    protected $mailer;
+    protected SpyingSymfonyMailer $mailer;
 
     /**
      * @var JsonKohanaMessaageProviderStub
@@ -42,7 +41,7 @@ class SwiftNotificationMailerTest extends TestCase
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf(SwiftNotificationMailer::class, $subject);
+        $this->assertInstanceOf(SymfonyMailerNotificationMailer::class, $subject);
         $this->assertInstanceOf(UserNotificationMailer::class, $subject);
     }
 
@@ -58,7 +57,7 @@ class SwiftNotificationMailerTest extends TestCase
     {
         $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.com']);
         $mail = $this->mailer->assertSentOne();
-        $this->assertSame(['foo@bar.com' => NULL], $mail->getTo());
+        $this->assertEquals([new Address('foo@bar.com', '')], $mail->getTo());
     }
 
     public function test_it_sends_email_from_configured_sender()
@@ -69,7 +68,7 @@ class SwiftNotificationMailerTest extends TestCase
         ];
         $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.com']);
         $mail = $this->mailer->assertSentOne();
-        $this->assertSame(['warden-sendWardenNotification@mail.net' => 'Mail Warden'], $mail->getFrom());
+        $this->assertEquals([new Address('warden-sendWardenNotification@mail.net', 'Mail Warden')], $mail->getFrom());
     }
 
     public function test_it_sets_subject_from_message_provider_for_notification()
@@ -93,7 +92,7 @@ class SwiftNotificationMailerTest extends TestCase
     {
         $this->sendConfirmationRequiredWith(['continuation_url' => '/reset?foo=blah']);
         $mail    = $this->mailer->assertSentOne();
-        $message = $this->assertHasMessagePart($mail, 'text/plain');
+        $message = $this->assertHasMessageText($mail);
 
         $this->messages->assertIsMessage(
             'user_notification_mail',
@@ -105,25 +104,11 @@ class SwiftNotificationMailerTest extends TestCase
         );
     }
 
-
-    /**
-     * @param $mail
-     * @param $content_type
-     *
-     * @return mixed
-     */
-    protected function assertHasMessagePart(\Swift_Message $mail, $content_type)
+    protected function assertHasMessageText(Email $mail): string
     {
-        $this->assertNotEmpty($mail->getChildren(), 'Mail has no body parts');
-        $found_parts = [];
-        foreach ($mail->getChildren() as $part) {
-            if ($part->getContentType() === $content_type) {
-                return $part->getBody();
-            }
-            $found_parts[] = "'".$part->getContentType()."'";
-        }
+        $this->assertNotEmpty($mail->getTextBody(), 'Mail has no text body');
 
-        $this->fail("No '$content_type' part in ".\implode($found_parts));
+        return $mail->getTextBody();
     }
 
     /**
@@ -150,40 +135,37 @@ class SwiftNotificationMailerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->mailer   = new SpyingSwiftMailer;
+        $this->mailer   = new SpyingSymfonyMailer;
         $this->messages = new JsonKohanaMessaageProviderStub;
 
     }
 
-    protected function newSubject()
+    protected function newSubject(): SymfonyMailerNotificationMailer
     {
-        return new SwiftNotificationMailer($this->mailer, $this->messages, $this->config);
+        return new SymfonyMailerNotificationMailer($this->mailer, $this->messages, $this->config);
     }
 
 }
 
-class SpyingSwiftMailer extends \Swift_Mailer
+class SpyingSymfonyMailer implements MailerInterface
 {
     /**
-     * @var \Swift_Mime_SimpleMessage[]
+     * @var Email[]
      */
     protected $mails = [];
 
     public function __construct() { }
 
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = NULL)
+    public function send(RawMessage $message, Envelope $envelope = null): void
     {
         $this->mails[] = $message;
     }
 
-    /**
-     * @return Swift_Message
-     */
-    public function assertSentOne()
+    public function assertSentOne(): Email
     {
         Assert::assertCount(1, $this->mails);
         $message = $this->mails[0];
-        Assert::assertInstanceOf(Swift_Message::class, $message);
+        Assert::assertInstanceOf(Email::class, $message);
 
         return $message;
     }

@@ -122,9 +122,9 @@ class WardenKohanaDependencyFactory
                 'notification' => [
                     'mailer' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\UI\Kohana\Notification\SwiftNotificationMailer::class,
+                            'class'     => \Ingenerator\Warden\UI\Kohana\Notification\SymfonyMailerNotificationMailer::class,
                             'arguments' => [
-                                '%swiftmailer.mailer%',
+                                '%symfonymailer.mailer%',
                                 '%kohana.message_provider%',
                                 '@warden.email_notifications@',
                             ],
