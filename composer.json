@@ -17,7 +17,7 @@
     }
   ],
   "require": {
-    "php": "~8.0.0 || ~8.1.0",
+    "php": "~8.1.0",
     "ext-json": "*",
     "ingenerator/warden-core": "^1.2",
     "ingenerator/warden-validator-symfony": "^1.2",
