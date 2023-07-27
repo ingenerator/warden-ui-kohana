@@ -33,7 +33,7 @@ class RegistrationViewTest extends AbstractFormViewTest
             [
                 'fields' => new Fieldset(
                     [
-                        'email'                    => 'foo@bar.com',
+                        'email'                    => 'test@warden.test',
                         'email_confirmation_token' => $token,
                     ], []
                 ),

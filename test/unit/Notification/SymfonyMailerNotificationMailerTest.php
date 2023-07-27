@@ -27,7 +27,7 @@ use function json_encode;
 class SymfonyMailerNotificationMailerTest extends TestCase
 {
     protected array $config = [
-        'email_sender'      => 'foo@warden.net',
+        'email_sender'      => 'foo@warden.test',
         'email_sender_name' => 'Warden Emailer',
     ];
 
@@ -55,25 +55,25 @@ class SymfonyMailerNotificationMailerTest extends TestCase
 
     public function test_it_sends_email_to_notification_recipient()
     {
-        $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.com']);
+        $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.test']);
         $mail = $this->mailer->assertSentOne();
-        $this->assertEquals([new Address('foo@bar.com', '')], $mail->getTo());
+        $this->assertEquals([new Address('foo@bar.test', '')], $mail->getTo());
     }
 
     public function test_it_sends_email_from_configured_sender()
     {
         $this->config = [
-            'email_sender'      => 'warden-sendWardenNotification@mail.net',
+            'email_sender'      => 'warden-sendWardenNotification@mail.test',
             'email_sender_name' => 'Mail Warden',
         ];
-        $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.com']);
+        $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.test']);
         $mail = $this->mailer->assertSentOne();
-        $this->assertEquals([new Address('warden-sendWardenNotification@mail.net', 'Mail Warden')], $mail->getFrom());
+        $this->assertEquals([new Address('warden-sendWardenNotification@mail.test', 'Mail Warden')], $mail->getFrom());
     }
 
     public function test_it_sets_subject_from_message_provider_for_notification()
     {
-        $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.com']);
+        $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.test']);
         $mail = $this->mailer->assertSentOne();
         $this->messages->assertIsMessage(
             'user_notification_mail',
@@ -118,7 +118,7 @@ class SymfonyMailerNotificationMailerTest extends TestCase
     {
         $values       = \array_merge(
             [
-                'recipient'         => 'foo@bar.com',
+                'recipient'         => 'foo@bar.test',
                 'action'            => EmailVerificationRequest::REGISTER,
                 'continuation_url' => '/reset?fo=blash',
             ],
