@@ -1,5 +1,11 @@
 ### Unreleased
 
+### v2.0.0 (2023-07-28)
+
+* Replace Swiftmailer with symfony/mailer
+* Support PHP 8.2
+* Drop support for PHP 8.0
+
 ### v1.4.2 (2022-10-24)
 
 * Update 1.4 series with fixes from 1.3.1 (update dependencies / drop direct dependency

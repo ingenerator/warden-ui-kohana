@@ -56,14 +56,14 @@ class WardenConfigBasedRouterTest extends TestCase
             ],
             ['default-user-home', 'getDefaultUserHomeUrl', [UserStub::withId(5)], '/shiny-page'],
             ['login', 'getLoginUrl', [], '/shiny-page'],
-            ['login', 'getLoginUrl', ['some@some.net'], '/shiny-page?email=some%40some.net'],
+            ['login', 'getLoginUrl', ['some@some.test'], '/shiny-page?email=some%40some.test'],
             ['logout', 'getLogoutUrl', [], '/shiny-page'],
             ['register-verify-email', 'getRegisterVerifyEmailUrl', [], '/shiny-page'],
             [
                 'register-verify-email',
                 'getRegisterVerifyEmailUrl',
-                ['some@some.net'],
-                '/shiny-page?email=some%40some.net',
+                ['some@warden.test'],
+                '/shiny-page?email=some%40warden.test',
             ],
         ];
     }
