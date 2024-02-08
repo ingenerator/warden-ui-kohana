@@ -27,7 +27,7 @@
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/tokenista": "^1.4",
     "composer/installers": "^1.9",
-    "symfony/mailer": "^6.3"
+    "symfony/mailer": "^6.3 || ^7.0"
   },
   "require-dev": {
     "kohana/koharness": "dev-master",
