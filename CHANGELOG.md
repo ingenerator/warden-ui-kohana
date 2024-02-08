@@ -1,5 +1,11 @@
 ### Unreleased
 
+### v2.1.0 (2024-02-08)
+
+* Drop support for PHP 8.1
+* Support kohana-extras v3
+* Support symfony mailer v7
+
 ### v2.0.0 (2023-07-28)
 
 * Replace Swiftmailer with symfony/mailer
