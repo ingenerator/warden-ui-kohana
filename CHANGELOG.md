@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v2.2.0 (2024-02-13)
+
+* Update min requirements of kohana-extras to provide a symfony validator factory which explicitly enables a doctrine annotation reader. Additionally require min versions of warden-core and warden-validator-symfony that are compatible with symfony validator > v5 to use the Assert/Email mode=strict option.
+
 ### v2.1.0 (2024-02-08)
 
 * Drop support for PHP 8.1
