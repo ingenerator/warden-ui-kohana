@@ -19,14 +19,15 @@
   "require": {
     "php": "~8.2.0",
     "ext-json": "*",
-    "ingenerator/warden-core": "^1.2",
-    "ingenerator/warden-validator-symfony": "^1.2",
-    "ingenerator/warden-persistence-doctrine": "^1.2",
-    "ingenerator/kohana-view": "^4.4",
-    "ingenerator/kohana-extras": "^2.0 || ^3.0",
-    "ingenerator/kohana-core": "^4.7",
-    "ingenerator/tokenista": "^1.4",
     "composer/installers": "^1.9",
+    "doctrine/annotations": "^1.13",
+    "ingenerator/kohana-core": "^4.7",
+    "ingenerator/kohana-extras": "^3.1",
+    "ingenerator/kohana-view": "^4.4",
+    "ingenerator/tokenista": "^1.4",
+    "ingenerator/warden-core": "^1.2.1",
+    "ingenerator/warden-persistence-doctrine": "^1.2",
+    "ingenerator/warden-validator-symfony": "^1.2.1",
     "symfony/mailer": "^6.3 || ^7.0"
   },
   "require-dev": {
@@ -53,6 +54,7 @@
   },
   "config": {
     "preferred-install": "dist",
+    "sort-packages": true,
     "allow-plugins": {
       "composer/installers": true
     }
