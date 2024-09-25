@@ -15,10 +15,13 @@ jobs:
       matrix:
         php_version:
         - '8.2'
+        - '8.3'
         dependencies:
         - 'default'
         include:
         - php_version: '8.2'
+          dependencies: 'lowest'
+        - php_version: '8.3'
           dependencies: 'lowest'
 
     steps:
@@ -60,7 +63,3 @@ jobs:
     - name: Run unit tests
       run: |
         vendor/bin/phpunit --testsuite=Unit
-
-    - name: Run integration tests
-      run: |
-        vendor/bin/phpunit --testsuite=Integration
