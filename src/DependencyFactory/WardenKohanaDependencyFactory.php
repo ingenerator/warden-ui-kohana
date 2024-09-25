@@ -8,6 +8,7 @@ namespace Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
+use Ingenerator\Warden\Core\Validator\SymfonyValidatorFactory;
 use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
@@ -200,10 +201,8 @@ class WardenKohanaDependencyFactory
                 'validator'    => [
                     'validator' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Validator\Symfony\SymfonyValidator::class,
-                            'arguments' => [
-                                '%validation.validator%',
-                            ],
+                            'class'       => SymfonyValidatorFactory::class,
+                            'constructor' => 'factory',
                         ],
                     ],
                 ],

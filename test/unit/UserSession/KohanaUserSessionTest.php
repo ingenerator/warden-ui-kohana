@@ -13,9 +13,9 @@ use Ingenerator\Warden\Core\Repository\UserRepository;
 use Ingenerator\Warden\UI\Kohana\Entity\LastLoginTrackingUser;
 use Ingenerator\Warden\UI\Kohana\UserSession\KohanaUserSession;
 use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
-use test\unit\Ingenerator\Warden\Core\UserSession\UserSessionTest;
+use test\unit\Ingenerator\Warden\Core\UserSession\UserSessionTestCase;
 
-class KohanaUserSessionTest extends UserSessionTest
+class KohanaUserSessionTest extends UserSessionTestCase
 {
     /**
      * @var \Session_Array

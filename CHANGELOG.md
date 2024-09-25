@@ -1,5 +1,10 @@
 ### Unreleased
 
+### v3.0.0 (2024-09-25)
+
+* Support PHP 8.3
+* Support warden-core v2 which allows us to drop warden-validator-symfony
+
 ### v2.2.0 (2024-02-13)
 
 * Update min requirements of kohana-extras to provide a symfony validator factory which explicitly enables a doctrine annotation reader. Additionally require min versions of warden-core and warden-validator-symfony that are compatible with symfony validator > v5 to use the Assert/Email mode=strict option.
