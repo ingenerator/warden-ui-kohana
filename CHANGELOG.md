@@ -1,5 +1,7 @@
 ### Unreleased
 
+### v3.0.0 (2024-09-25)
+
 * Support PHP 8.3
 * Support warden-core v2 which allows us to drop warden-validator-symfony
 
