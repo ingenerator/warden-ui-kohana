@@ -8,9 +8,9 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
 use Ingenerator\KohanaView\ViewModel\PageContentView;
-use Ingenerator\Warden\UI\Kohana\View\LoginView;
-use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 use Ingenerator\Warden\Core\Support\FixedUrlProviderStub;
+use Ingenerator\Warden\UI\Kohana\View\LoginView;
+use test\mock\View\DummyPageLayoutView;
 
 class LoginViewTest extends AbstractFormViewTest
 {

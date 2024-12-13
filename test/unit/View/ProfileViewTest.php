@@ -8,10 +8,10 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
 use Ingenerator\KohanaView\ViewModel\PageContentView;
-use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 use Ingenerator\Warden\Core\Entity\SimpleUser;
+use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 use InvalidArgumentException;
-use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use test\mock\View\DummyPageLayoutView;
 
 class ProfileViewTest extends \PHPUnit\Framework\TestCase
 {

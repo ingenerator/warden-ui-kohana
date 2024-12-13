@@ -10,9 +10,8 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\Warden\Core\Entity\SimpleUser;
 use Ingenerator\Warden\UI\Kohana\View\ChangeEmailView;
-use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
 use InvalidArgumentException;
-use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use test\mock\View\DummyPageLayoutView;
 
 class ChangeEmailViewTest extends AbstractFormViewTest
 {
