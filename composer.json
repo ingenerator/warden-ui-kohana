@@ -20,7 +20,6 @@
     "php": "~8.2.0 || ~8.3.0",
     "ext-json": "*",
     "composer/installers": "^1.9",
-    "doctrine/annotations": "^1.13",
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/kohana-extras": "^3.1",
     "ingenerator/kohana-view": "^4.4",
