@@ -10,7 +10,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
-use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use test\mock\View\DummyPageLayoutView;
 
 class RegistrationViewTest extends AbstractFormViewTest
 {

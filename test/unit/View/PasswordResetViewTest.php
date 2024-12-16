@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\Warden\UI\Kohana\View\PasswordResetView;
-use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use test\mock\View\DummyPageLayoutView;
 
 class PasswordResetViewTest extends AbstractFormViewTest
 {

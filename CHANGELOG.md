@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v3.1.0 (2024-12-16)
+
+* Drop composer dependency on doctrine/annotations - not used by warden since warden-core:2.0
+
 ### v3.0.0 (2024-09-25)
 
 * Support PHP 8.3
