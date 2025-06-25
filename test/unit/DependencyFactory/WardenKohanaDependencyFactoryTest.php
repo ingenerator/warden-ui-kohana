@@ -12,9 +12,18 @@ use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use Ingenerator\Tokenista;
+use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
+use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
+use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
+use Ingenerator\Warden\UI\Kohana\Controller\ProfileController;
 use Ingenerator\Warden\UI\Kohana\Controller\RegisterController;
+use Ingenerator\Warden\UI\Kohana\Controller\ResetPasswordController;
+use Ingenerator\Warden\UI\Kohana\Controller\VerifyEmailController;
 use Ingenerator\Warden\UI\Kohana\DependencyFactory\WardenKohanaDependencyFactory;
+use InvalidArgumentException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -70,22 +79,60 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function provider_controller_subsets()
     {
+        $all_controllers = [
+            '\\'.ChangeEmailController::class,
+            '\\'.ChangePasswordController::class,
+            '\\'.CompleteActivateAccountController::class,
+            '\\'.CompleteChangeEmailController::class,
+            '\\'.LoginController::class,
+            '\\'.LogoutController::class,
+            '\\'.ProfileController::class,
+            '\\'.RegisterController::class,
+            '\\'.ResetPasswordController::class,
+            '\\'.VerifyEmailController::class,
+        ];
+
         return [
             [
-                NULL,
-                [LoginController::class => TRUE, RegisterController::class => TRUE],
-            ],
-            [
                 [],
-                [LoginController::class => FALSE, RegisterController::class => FALSE],
+                $all_controllers,
             ],
             [
-                [LoginController::class],
-                [LoginController::class => TRUE, RegisterController::class => FALSE],
+                ['only_controllers' => NULL],
+                $all_controllers,
             ],
             [
-                [LoginController::class, RegisterController::class],
-                [LoginController::class => TRUE, RegisterController::class => TRUE],
+                ['only_controllers' => []],
+                [],
+            ],
+            [
+                ['only_controllers' => [LoginController::class]],
+                ['\\'.LoginController::class],
+            ],
+            [
+                ['only_controllers' => [LoginController::class, RegisterController::class]],
+                ['\\'.LoginController::class, '\\'.RegisterController::class],
+            ],
+            [
+                [
+                    'only_controllers' => [LoginController::class, RegisterController::class],
+                    'not_controllers' => [],
+                ],
+                ['\\'.LoginController::class, '\\'.RegisterController::class],
+            ],
+            [
+                ['not_controllers' => [LoginController::class]],
+                array_filter(
+                    $all_controllers,
+                    fn($c) => $c !== '\\'.LoginController::class
+                ),
+            ],
+            [
+                ['not_controllers' => [LoginController::class, RegisterController::class]],
+                array_filter(
+                    $all_controllers,
+                    fn($c) => $c !== '\\'.LoginController::class && $c !== '\\'.RegisterController::class
+                ),
             ],
         ];
     }
@@ -95,14 +142,42 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function test_it_optionally_allows_to_define_a_subset_of_controllers($args, $expect_has)
     {
-        $definitions = WardenKohanaDependencyFactory::controllerDefinitions($args);
+        $definitions = WardenKohanaDependencyFactory::controllerDefinitions(...$args);
 
         $actual_has = [];
-        foreach (\array_keys($expect_has) as $controller) {
-            $actual_has[$controller] = isset($definitions['controller']['\\'.$controller]['_settings']);
+        foreach ($definitions['controller'] as $controller => $controller_def) {
+            $this->assertSame(['_settings'], array_keys($controller_def), 'Should have settings for '.$controller);
+            $actual_has[]  = $controller;
         }
 
-        $this->assertEquals($expect_has, $actual_has);
+        $this->assertEqualsCanonicalizing($expect_has, $actual_has);
+    }
+
+    public static function provider_invalid_controller_subsets()
+    {
+        return [
+            'empty allow with a blacklist' => [
+                ['only_controllers' => [], 'not_controllers' => [LoginController::class]],
+            ],
+            'any allow with a blacklist' => [
+                ['only_controllers' => [LoginController::class], 'not_controllers' => [RegisterController::class]],
+            ],
+            'unknown only_controller' => [
+                ['only_controllers' => ['foobar']],
+            ],
+            'unknown not_controller' => [
+                ['not_controllers' => ['foobar']],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provider_invalid_controller_subsets
+     */
+    public function test_it_throws_on_invalid_combination_of_white_and_blacklist_controllers(array $args)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        WardenKohanaDependencyFactory::controllerDefinitions(...$args);
     }
 
     protected function dummy_dependencies(array $dependencies)

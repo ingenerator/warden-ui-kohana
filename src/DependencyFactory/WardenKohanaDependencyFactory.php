@@ -9,9 +9,9 @@ namespace Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
 use Ingenerator\Warden\Core\Validator\SymfonyValidatorFactory;
-use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
+use Ingenerator\Warden\UI\Kohana\Controller\CompleteActivateAccountController;
 use Ingenerator\Warden\UI\Kohana\Controller\CompleteChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\LoginController;
 use Ingenerator\Warden\UI\Kohana\Controller\LogoutController;
@@ -19,6 +19,7 @@ use Ingenerator\Warden\UI\Kohana\Controller\ProfileController;
 use Ingenerator\Warden\UI\Kohana\Controller\RegisterController;
 use Ingenerator\Warden\UI\Kohana\Controller\ResetPasswordController;
 use Ingenerator\Warden\UI\Kohana\Controller\VerifyEmailController;
+use InvalidArgumentException;
 
 class WardenKohanaDependencyFactory
 {
@@ -27,18 +28,18 @@ class WardenKohanaDependencyFactory
     {
         return [
             'warden' => [
-                'config'       => [
+                'config' => [
                     'configuration' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Config\Configuration::class,
+                            'class' => \Ingenerator\Warden\Core\Config\Configuration::class,
                             'arguments' => ['@warden.core@'],
                         ],
                     ],
                 ],
-                'interactor'   => [
+                'interactor' => [
                     'activate_account' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\ActivateAccountInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\ActivateAccountInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
                                 '%warden.support.token_service%',
@@ -49,7 +50,7 @@ class WardenKohanaDependencyFactory
                     ],
                     'change_email' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\ChangeEmailInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\ChangeEmailInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
                                 '%warden.support.token_service%',
@@ -60,7 +61,7 @@ class WardenKohanaDependencyFactory
                     ],
                     'change_password' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\ChangePasswordInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\ChangePasswordInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
                                 '%warden.support.password_hasher%',
@@ -70,7 +71,7 @@ class WardenKohanaDependencyFactory
                     ],
                     'email_verification' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
                                 '%warden.repository.user%',
@@ -81,9 +82,9 @@ class WardenKohanaDependencyFactory
                             ],
                         ],
                     ],
-                    'login'              => [
+                    'login' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\LoginInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\LoginInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
                                 '%warden.rate_limit.leaky_bucket%',
@@ -94,9 +95,9 @@ class WardenKohanaDependencyFactory
                             ],
                         ],
                     ],
-                    'password_reset'     => [
+                    'password_reset' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\PasswordResetInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\PasswordResetInteractor::class,
                             'arguments' => [
                                 '%warden.validator.validator%',
                                 '%warden.support.password_hasher%',
@@ -106,9 +107,9 @@ class WardenKohanaDependencyFactory
                             ],
                         ],
                     ],
-                    'user_registration'  => [
+                    'user_registration' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Interactor\UserRegistrationInteractor::class,
+                            'class' => \Ingenerator\Warden\Core\Interactor\UserRegistrationInteractor::class,
                             'arguments' => [
                                 '%warden.config.configuration%',
                                 '%warden.validator.validator%',
@@ -123,7 +124,7 @@ class WardenKohanaDependencyFactory
                 'notification' => [
                     'mailer' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\UI\Kohana\Notification\SymfonyMailerNotificationMailer::class,
+                            'class' => \Ingenerator\Warden\UI\Kohana\Notification\SymfonyMailerNotificationMailer::class,
                             'arguments' => [
                                 '%symfonymailer.mailer%',
                                 '%kohana.message_provider%',
@@ -132,10 +133,10 @@ class WardenKohanaDependencyFactory
                         ],
                     ],
                 ],
-                'repository'   => [
+                'repository' => [
                     'user' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Persistence\Doctrine\Repository\DoctrineUserRepository::class,
+                            'class' => \Ingenerator\Warden\Persistence\Doctrine\Repository\DoctrineUserRepository::class,
                             'arguments' => [
                                 '%warden.config.configuration%',
                                 '%doctrine.entity_manager%',
@@ -144,45 +145,45 @@ class WardenKohanaDependencyFactory
                     ],
                 ],
                 'rate_limit' => [
-                    'leaky_bucket'         => [
+                    'leaky_bucket' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\RateLimit\StorageBackedLeakyBucket::class,
+                            'class' => \Ingenerator\Warden\Core\RateLimit\StorageBackedLeakyBucket::class,
                             'arguments' => [
                                 '%warden.rate_limit.leaky_bucket_storage%',
-                                '@warden.rate_limits@'
+                                '@warden.rate_limits@',
                             ],
                         ],
                     ],
                     'leaky_bucket_storage' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\RateLimit\ApcuBucketStorage::class,
-                            'arguments' => []
+                            'class' => \Ingenerator\Warden\Core\RateLimit\ApcuBucketStorage::class,
+                            'arguments' => [],
                         ],
                     ],
                 ],
-                'support'      => [
+                'support' => [
                     'interactor_request_factory' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Support\InteractorRequestFactory::class,
+                            'class' => \Ingenerator\Warden\Core\Support\InteractorRequestFactory::class,
                             'arguments' => ['%warden.config.configuration%'],
                         ],
                     ],
-                    'password_hasher'            => [
+                    'password_hasher' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\Core\Support\NativePasswordHasher::class,
+                            'class' => \Ingenerator\Warden\Core\Support\NativePasswordHasher::class,
                             'arguments' => ['@warden.hashing@'],
                         ],
 
                     ],
-                    'token_service'              => [
+                    'token_service' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\UI\Kohana\Dummy\TokenistaTokenService::class,
+                            'class' => \Ingenerator\Warden\UI\Kohana\Dummy\TokenistaTokenService::class,
                             'arguments' => ['%tokenista.tokenista%'],
                         ],
                     ],
-                    'url_provider'               => [
+                    'url_provider' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter::class,
+                            'class' => \Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter::class,
                             'arguments' => ['@warden.url_routing@'],
                         ],
                     ],
@@ -190,7 +191,7 @@ class WardenKohanaDependencyFactory
                 'user_session' => [
                     'session' => [
                         '_settings' => [
-                            'class'     => \Ingenerator\Warden\UI\Kohana\UserSession\KohanaUserSession::class,
+                            'class' => \Ingenerator\Warden\UI\Kohana\UserSession\KohanaUserSession::class,
                             'arguments' => [
                                 '%kohana.session%',
                                 '%warden.repository.user%',
@@ -198,19 +199,19 @@ class WardenKohanaDependencyFactory
                         ],
                     ],
                 ],
-                'validator'    => [
+                'validator' => [
                     'validator' => [
                         '_settings' => [
-                            'class'       => SymfonyValidatorFactory::class,
+                            'class' => SymfonyValidatorFactory::class,
                             'constructor' => 'factory',
                         ],
                     ],
                 ],
-                'view'         => [
-                    'login'        => [
-                        'login'          => [
+                'view' => [
+                    'login' => [
+                        'login' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\LoginView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\LoginView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                     '%warden.support.url_provider%',
@@ -219,7 +220,7 @@ class WardenKohanaDependencyFactory
                         ],
                         'password_reset' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\PasswordResetView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\PasswordResetView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                 ],
@@ -229,25 +230,25 @@ class WardenKohanaDependencyFactory
                     'registration' => [
                         'email_verification' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\EmailVerificationView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\EmailVerificationView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                 ],
                             ],
                         ],
-                        'registration'       => [
+                        'registration' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\RegistrationView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\RegistrationView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                 ],
                             ],
                         ],
                     ],
-                    'profile'      => [
+                    'profile' => [
                         'change_email' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\ChangeEmailView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\ChangeEmailView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                 ],
@@ -255,7 +256,7 @@ class WardenKohanaDependencyFactory
                         ],
                         'change_password' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\ChangePasswordView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\ChangePasswordView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                 ],
@@ -263,7 +264,7 @@ class WardenKohanaDependencyFactory
                         ],
                         'profile' => [
                             '_settings' => [
-                                'class'     => \Ingenerator\Warden\UI\Kohana\View\ProfileView::class,
+                                'class' => \Ingenerator\Warden\UI\Kohana\View\ProfileView::class,
                                 'arguments' => [
                                     '%view.layout.default%',
                                 ],
@@ -276,14 +277,14 @@ class WardenKohanaDependencyFactory
     }
 
     /**
-     * @param string[] Optionally if you only want to publish a subset of the default controllers, specify the class names to include
-     *
      * @return array
      */
-    public static function controllerDefinitions(array $only_controllers = NULL)
-    {
+    public static function controllerDefinitions(
+        ?array $only_controllers = NULL,
+        array $not_controllers = [],
+    ) {
         $controllers = [
-            ChangeEmailController::class             => [
+            ChangeEmailController::class => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.interactor.email_verification%',
                 '%warden.view.profile.change_email%',
@@ -311,7 +312,7 @@ class WardenKohanaDependencyFactory
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
             ],
-            LoginController::class         => [
+            LoginController::class => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.interactor.login%',
                 '%warden.view.login.login%',
@@ -319,18 +320,18 @@ class WardenKohanaDependencyFactory
                 '%warden.user_session.session%',
                 '%kohana.psr_log%',
             ],
-            LogoutController::class        => [
+            LogoutController::class => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
             ],
-            ProfileController::class       => [
+            ProfileController::class => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.support.url_provider%',
                 '%warden.view.profile.profile%',
                 '%warden.user_session.session%',
             ],
-            RegisterController::class      => [
+            RegisterController::class => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.support.url_provider%',
                 '%warden.interactor.user_registration%',
@@ -344,7 +345,7 @@ class WardenKohanaDependencyFactory
                 '%warden.support.url_provider%',
                 '%warden.user_session.session%',
             ],
-            VerifyEmailController::class   => [
+            VerifyEmailController::class => [
                 '%warden.support.interactor_request_factory%',
                 '%warden.interactor.email_verification%',
                 '%warden.view.registration.email_verification%',
@@ -355,7 +356,26 @@ class WardenKohanaDependencyFactory
         ];
 
         if ($only_controllers !== NULL) {
-            $controllers = \Arr::extract($controllers, $only_controllers);
+            // Filter based on the whitelist, first checking that the caller's arguments are valid
+            if ($not_controllers) {
+                throw new InvalidArgumentException('Either pass `only_controllers` *or* `not_controllers`');
+            }
+
+            if ($undefined = array_diff($only_controllers, array_keys($controllers))) {
+                throw new InvalidArgumentException(
+                    'Some `only_controllers` were not defined: '.implode(', ', $undefined)
+                );
+            }
+
+            $controllers = array_intersect_key($controllers, array_fill_keys($only_controllers, TRUE));
+        } else if ($not_controllers) {
+            // Filter based on the blacklist, first checking that the caller's arguments are valid
+            if ($undefined = array_diff($not_controllers, array_keys($controllers))) {
+                throw new InvalidArgumentException(
+                    'Some `not_controllers` were not defined: '.implode(', ', $undefined)
+                );
+            }
+            $controllers = array_diff_key($controllers, array_fill_keys($not_controllers, TRUE));
         }
 
         return RequestExecutorFactory::controllerDefinitions($controllers);
