@@ -1,5 +1,10 @@
 ### Unreleased
 
+### v3.2.0 (2025-06-25)
+
+* Support excluding controller service definitions by blacklist (rather than having to specify a full
+  allowlist).
+
 ### v3.1.0 (2024-12-16)
 
 * Drop composer dependency on doctrine/annotations - not used by warden since warden-core:2.0
