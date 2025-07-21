@@ -156,7 +156,7 @@ class SpyingSymfonyMailer implements MailerInterface
 
     public function __construct() { }
 
-    public function send(RawMessage $message, Envelope $envelope = null): void
+    public function send(RawMessage $message, ?Envelope $envelope = null): void
     {
         $this->mails[] = $message;
     }

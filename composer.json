@@ -17,21 +17,21 @@
     }
   ],
   "require": {
-    "php": "~8.2.0 || ~8.3.0",
+    "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
     "ext-json": "*",
     "composer/installers": "^1.9",
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/kohana-extras": "^3.1",
     "ingenerator/kohana-view": "^4.4",
     "ingenerator/tokenista": "^1.4",
-    "ingenerator/warden-core": "^2.0",
+    "ingenerator/warden-core": "^2.1.1",
     "ingenerator/warden-persistence-doctrine": "^2.0",
-    "symfony/mailer": "^6.3 || ^7.0"
+    "symfony/mailer": "^7.2"
   },
   "require-dev": {
     "kohana/koharness": "dev-master",
     "johnkary/phpunit-speedtrap": "^3.3",
-    "phpunit/phpunit": "^9.5.5"
+    "phpunit/phpunit": "^9.6.23"
   },
   "conflict": {
     "egulias/email-validator": "<3.2.1"

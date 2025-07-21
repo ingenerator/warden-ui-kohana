@@ -16,13 +16,10 @@ jobs:
         php_version:
         - '8.2'
         - '8.3'
-        dependencies:
-        - 'highest'
-        include:
-        - php_version: '8.2'
-          dependencies: 'lowest'
-        - php_version: '8.3'
-          dependencies: 'lowest'
+        - '8.4'
+        dependency-versions:
+        - 'default'
+        - 'lowest'
 
     steps:
     - name: Setup PHP
@@ -37,7 +34,7 @@ jobs:
     - name: Install composer dependencies
       uses: ramsey/composer-install@v3
       with:
-        dependency-versions: ${{ matrix.dependencies }}
+        dependency-versions: ${{ matrix.dependency-versions }}
 
     - name: Run koharness
       run: |
