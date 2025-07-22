@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v3.3.0 (2025-07-22)
+
+* Support PHP 8.4
+
 ### v3.2.0 (2025-06-25)
 
 * Support excluding controller service definitions by blacklist (rather than having to specify a full
