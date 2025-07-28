@@ -1,5 +1,9 @@
 ### Unreleased
 
+### v3.3.1 (2025-07-28)
+
+* Add support for v2.x of composer/installers
+
 ### v3.3.0 (2025-07-22)
 
 * Support PHP 8.4
