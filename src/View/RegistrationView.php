@@ -10,8 +10,7 @@ namespace Ingenerator\Warden\UI\Kohana\View;
 
 class RegistrationView extends AbstractFormView
 {
-
     public string $is_email_readonly {
-        get => $this->fields['email_confirmation_token']['value'] ? 'readonly' : FALSE;
+        get => $this->fields['email_confirmation_token']['value'] ? 'readonly' : '';
     }
 }

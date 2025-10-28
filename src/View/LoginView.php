@@ -15,14 +15,12 @@ class LoginView extends AbstractFormView
     public string $login_url {
         get => $this->url_provider->getLoginUrl();
     }
-    /**
-     * @var UrlProvider
-     */
-    protected $url_provider;
 
-    public function __construct(NestedParentView $page, UrlProvider $url_provider)
+    public function __construct(
+        NestedParentView $page,
+        protected readonly UrlProvider $url_provider
+    )
     {
         parent::__construct($page);
-        $this->url_provider = $url_provider;
     }
 }
