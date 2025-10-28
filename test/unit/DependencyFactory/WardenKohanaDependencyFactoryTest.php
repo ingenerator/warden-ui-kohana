@@ -7,10 +7,13 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 
+use PHPUnit\Framework\TestCase;
+use PSR\Log\LoggerInterface;
+use Session;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Doctrine\ORM\EntityManager;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
-use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use Ingenerator\Tokenista;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangeEmailController;
 use Ingenerator\Warden\UI\Kohana\Controller\ChangePasswordController;
@@ -27,7 +30,7 @@ use InvalidArgumentException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
+class WardenKohanaDependencyFactoryTest extends TestCase
 {
 
     public function provider_service_names()
@@ -62,12 +65,12 @@ class WardenKohanaDependencyFactoryTest extends \PHPUnit\Framework\TestCase
                         [
                             'doctrine.entity_manager' => EntityManager::class,
                             'kohana.message_provider' => KohanaMessageProvider::class,
-                            'kohana.psr_log'          => \PSR\Log\LoggerInterface::class,
-                            'kohana.session'          => \Session::class,
+                            'kohana.psr_log'          => LoggerInterface::class,
+                            'kohana.session'          => Session::class,
                             'symfonymailer.mailer'      => MailerInterface::class,
                             'tokenista.tokenista'     => Tokenista::class,
                             'validation.validator'    => ValidatorInterface::class,
-                            'view.layout.default'     => PageLayoutView::class,
+                            'view.layout.default'     => NestedParentView::class,
                         ]
                     ),
                 ],

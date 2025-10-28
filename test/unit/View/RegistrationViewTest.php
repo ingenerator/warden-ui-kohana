@@ -7,7 +7,7 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
-use Ingenerator\KohanaView\ViewModel\PageContentView;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
 use test\mock\View\DummyPageLayoutView;
@@ -19,7 +19,7 @@ class RegistrationViewTest extends AbstractFormViewTest
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\RegistrationView', $subject);
-        $this->assertInstanceOf(PageContentView::class, $subject);
+        $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
     /**

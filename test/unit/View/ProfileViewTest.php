@@ -7,20 +7,21 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
-use Ingenerator\KohanaView\ViewModel\PageContentView;
+use PHPUnit\Framework\TestCase;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\Warden\Core\Entity\SimpleUser;
 use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 use InvalidArgumentException;
 use test\mock\View\DummyPageLayoutView;
 
-class ProfileViewTest extends \PHPUnit\Framework\TestCase
+class ProfileViewTest extends TestCase
 {
 
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\ProfileView', $subject);
-        $this->assertInstanceOf(PageContentView::class, $subject);
+        $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
     public function test_it_throws_if_user_is_not_a_user()
