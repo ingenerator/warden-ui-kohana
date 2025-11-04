@@ -7,7 +7,7 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
-use Ingenerator\KohanaView\ViewModel\PageContentView;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
 use test\mock\View\DummyPageLayoutView;
@@ -19,12 +19,12 @@ class RegistrationViewTest extends AbstractFormViewTest
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\RegistrationView', $subject);
-        $this->assertInstanceOf(PageContentView::class, $subject);
+        $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
     /**
      * @testWith ["122412323", "readonly"]
-     *           ["", false]
+     *           ["", ""]
      */
     public function test_it_makes_email_readonly_if_confirmation_token_is_provided($token, $expect_readonly)
     {

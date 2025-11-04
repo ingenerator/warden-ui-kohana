@@ -7,26 +7,20 @@
 namespace Ingenerator\Warden\UI\Kohana\View;
 
 
-use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 
-/**
- * @property-read string $login_url
- */
 class LoginView extends AbstractFormView
 {
-    /**
-     * @var UrlProvider
-     */
-    protected $url_provider;
-
-    public function __construct(PageLayoutView $page, UrlProvider $url_provider)
-    {
-        parent::__construct($page);
-        $this->url_provider = $url_provider;
+    public string $login_url {
+        get => $this->url_provider->getLoginUrl();
     }
 
-    protected function var_login_url(){
-        return $this->url_provider->getLoginUrl();
+    public function __construct(
+        NestedParentView $page,
+        protected readonly UrlProvider $url_provider
+    )
+    {
+        parent::__construct($page);
     }
 }

@@ -7,7 +7,7 @@
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
-use Ingenerator\KohanaView\ViewModel\PageContentView;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\Warden\UI\Kohana\View\EmailVerificationView;
 use test\mock\View\DummyPageLayoutView;
 
@@ -17,7 +17,7 @@ class EmailVerificationViewTest extends AbstractFormViewTest
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\EmailVerificationView', $subject);
-        $this->assertInstanceOf(PageContentView::class, $subject);
+        $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
     protected function newSubject()
