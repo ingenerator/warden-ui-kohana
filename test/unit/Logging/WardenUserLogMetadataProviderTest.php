@@ -41,7 +41,7 @@ class WardenUserLogMetadataProviderTest extends TestCase
         $class = new class extends DependencyContainer {
             public function __construct() { }
 
-            public static function instance()
+            public static function instance(): static
             {
                 throw new SingletonNotInitialisedException('Not initialised');
             }
@@ -162,7 +162,7 @@ class WardenUserLogMetadataProviderTest extends TestCase
                 static::$this_instance = $this;
             }
 
-            public static function instance()
+            public static function instance(): static
             {
                 return static::$this_instance;
             }
