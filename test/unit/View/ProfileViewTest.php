@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author    Craig Gosman <craig@ingenerator.com>
  * @licence   proprietary
  */
-
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
@@ -14,23 +16,23 @@ use Ingenerator\Warden\UI\Kohana\View\ProfileView;
 use InvalidArgumentException;
 use test\mock\View\DummyPageLayoutView;
 
-class ProfileViewTest extends TestCase
+final class ProfileViewTest extends TestCase
 {
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\ProfileView', $subject);
+        $this->assertInstanceOf(ProfileView::class, $subject);
         $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
-    public function test_it_throws_if_user_is_not_a_user()
+    public function test_it_throws_if_user_is_not_a_user(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->newSubject()->display(['user' => 'string']);
     }
 
-    public function test_it_exposes_user_variable()
+    public function test_it_exposes_user_variable(): void
     {
         $user = new SimpleUser();
         $subject = $this->newSubject();
@@ -38,7 +40,7 @@ class ProfileViewTest extends TestCase
         $this->assertSame($user, $subject->user);
     }
 
-    protected function newSubject()
+    protected function newSubject(): ProfileView
     {
         return new ProfileView(new DummyPageLayoutView);
     }

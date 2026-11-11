@@ -18,13 +18,13 @@ class UserStub extends SimpleUser
      *
      * @return static
      */
-    public static function fromArray(array $params)
+    public static function fromArray(array $params): static
     {
         $i = new static;
         foreach ($params as $prop => $value) {
             if ( ! \property_exists($i, $prop)) {
                 throw new InvalidArgumentException(
-                    'Undefined property '.$prop.' on '.\get_class($i)
+                    'Undefined property '.$prop.' on '.$i::class
                 );
             }
             $i->$prop = $value;
@@ -37,7 +37,7 @@ class UserStub extends SimpleUser
      *
      * @return static
      */
-    public static function withEmail($email)
+    public static function withEmail($email): static
     {
         return static::fromArray(['email' => $email]);
     }
@@ -47,7 +47,7 @@ class UserStub extends SimpleUser
      *
      * @return static
      */
-    public static function withId($id)
+    public static function withId($id): static
     {
         return static::fromArray(['id' => $id]);
     }
@@ -58,7 +58,7 @@ class UserStub extends SimpleUser
      *
      * @return static
      */
-    public static function activeWithPasswordHash($email, $password_hash)
+    public static function activeWithPasswordHash($email, $password_hash): static
     {
         return static::fromArray(
             [
@@ -75,7 +75,7 @@ class UserStub extends SimpleUser
      *
      * @return static
      */
-    public static function inactiveWithPasswordHash($email, $password_hash)
+    public static function inactiveWithPasswordHash($email, $password_hash): static
     {
         return static::fromArray(
             [
