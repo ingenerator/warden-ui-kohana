@@ -7,6 +7,8 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
+use Psr\Log\LoggerInterface;
 use Ingenerator\Warden\Core\Interactor\ChangeEmailInteractor;
 use Ingenerator\Warden\Core\Interactor\ChangeEmailResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
@@ -34,7 +36,7 @@ class CompleteChangeEmailController extends WardenBaseController
     protected $urls;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -50,7 +52,7 @@ class CompleteChangeEmailController extends WardenBaseController
         $this->interactor = $interactor;
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $values = [
             'user_id' => $this->request->query('user_id'),
@@ -86,7 +88,7 @@ class CompleteChangeEmailController extends WardenBaseController
             );
             $this->redirect($this->getCompletionUrl());
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Unexpected email change failure: '.$result->getFailureCode()
             );
         }

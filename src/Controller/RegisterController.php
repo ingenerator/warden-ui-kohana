@@ -6,6 +6,10 @@
 
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
+use Request;
+use BadMethodCallException;
+use UnexpectedValueException;
+use Ingenerator\Warden\Core\Interactor\UserRegistrationRequest;
 use Ingenerator\Warden\Core\Entity\User;
 use Ingenerator\Warden\Core\Interactor\UserRegistrationInteractor;
 use Ingenerator\Warden\Core\Interactor\UserRegistrationResponse;
@@ -33,14 +37,10 @@ class RegisterController extends WardenBaseController
      * @var UserSession
      */
     protected $session;
-    /**
-     * @var UrlProvider
-     */
-    private $urls;
 
     public function __construct(
         InteractorRequestFactory $rq_factory,
-        UrlProvider $urls,
+        private readonly UrlProvider $urls,
         UserRegistrationInteractor $register_interactor,
         RegistrationView $register_view,
         UserSession $session
@@ -49,16 +49,15 @@ class RegisterController extends WardenBaseController
         $this->register_interactor = $register_interactor;
         $this->register_view       = $register_view;
         $this->session             = $session;
-        $this->urls                = $urls;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         $this->redirectHomeIfLoggedIn($this->session, $this->urls);
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $request     = $this->makeRegistrationRequest();
         $token_state = $this->register_interactor->validateToken($request);
@@ -77,11 +76,11 @@ class RegisterController extends WardenBaseController
     }
 
     /**
-     * @return \Ingenerator\Warden\Core\Interactor\UserRegistrationRequest
+     * @return UserRegistrationRequest
      */
     protected function makeRegistrationRequest()
     {
-        if ($this->request->method() === \Request::POST) {
+        if ($this->request->method() === Request::POST) {
             $values = $this->request->post();
         } else {
             $values = [
@@ -104,7 +103,7 @@ class RegisterController extends WardenBaseController
         $this->respondPageContent($this->register_view);
     }
 
-    public function action_post()
+    public function action_post(): void
     {
         $result = $this->register_interactor->execute(
             $this->makeInteractorRequest(
@@ -128,7 +127,7 @@ class RegisterController extends WardenBaseController
 
     protected function handleInactiveUserRegistration()
     {
-        throw new \BadMethodCallException('Registering inactive users is not yet supported');
+        throw new BadMethodCallException('Registering inactive users is not yet supported');
         // Trigger EmailVerificationInteractor
         // EmailVerificationRequest::forActivation($user);
         // Flash a notification
@@ -138,7 +137,7 @@ class RegisterController extends WardenBaseController
     protected function handleActiveUserRegistration(User $user)
     {
         if ( ! $this->session->isAuthenticated()) {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Active user was not authenticated after registration'
             );
         }
@@ -163,7 +162,7 @@ class RegisterController extends WardenBaseController
             );
 
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Unexpected registration failure: '.$result->getFailureCode()
             );
         }

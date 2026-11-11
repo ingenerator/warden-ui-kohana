@@ -6,7 +6,11 @@
  */
 namespace Ingenerator\Warden\UI\Kohana\Form;
 
-class Fieldset implements \ArrayAccess
+use ArrayAccess;
+use Arr;
+use BadMethodCallException;
+
+class Fieldset implements ArrayAccess
 {
     protected $error_validation_class = 'has-error';
     protected $success_validation_class;
@@ -25,7 +29,7 @@ class Fieldset implements \ArrayAccess
     {
         $this->values                   = $values;
         $this->errors                   = $errors;
-        $this->success_validation_class = empty($this->errors) ? NULL : 'has-success';
+        $this->success_validation_class = $this->errors === [] ? NULL : 'has-success';
     }
 
     public function offsetExists($offset): bool
@@ -35,8 +39,8 @@ class Fieldset implements \ArrayAccess
 
     public function offsetGet($offset): array
     {
-        $value = \Arr::get($this->values, $offset);
-        $error = \Arr::get($this->errors, $offset);
+        $value = Arr::get($this->values, $offset);
+        $error = Arr::get($this->errors, $offset);
 
         return [
             'value'            => $value,
@@ -47,12 +51,12 @@ class Fieldset implements \ArrayAccess
 
     public function offsetSet($offset, $value): void
     {
-        throw new \BadMethodCallException(\get_class($this).' is immutable, cannot call '.__METHOD__);
+        throw new BadMethodCallException(static::class.' is immutable, cannot call '.__METHOD__);
     }
 
     public function offsetUnset($offset): void
     {
-        throw new \BadMethodCallException(\get_class($this).' is immutable, cannot call '.__METHOD__);
+        throw new BadMethodCallException(static::class.' is immutable, cannot call '.__METHOD__);
     }
 
 }

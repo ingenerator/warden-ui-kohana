@@ -7,6 +7,7 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
 use Ingenerator\Warden\Core\Interactor\ChangePasswordInteractor;
 use Ingenerator\Warden\Core\Interactor\ChangePasswordResponse;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationResponse;
@@ -21,7 +22,7 @@ use Psr\Log\LoggerInterface;
 class ChangePasswordController extends WardenBaseController
 {
     /**
-     * @var \Ingenerator\Warden\Core\Interactor\ChangePasswordInteractor
+     * @var ChangePasswordInteractor
      */
     protected $password_interactor;
 
@@ -36,12 +37,12 @@ class ChangePasswordController extends WardenBaseController
     protected $urls;
 
     /**
-     * @var \Ingenerator\Warden\UI\Kohana\View\ChangePasswordView
+     * @var ChangePasswordView
      */
     protected $form_view;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -61,7 +62,7 @@ class ChangePasswordController extends WardenBaseController
         $this->password_interactor = $password_interactor;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         if ( ! $this->session->isAuthenticated()) {
@@ -69,7 +70,7 @@ class ChangePasswordController extends WardenBaseController
         }
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $this->displayChangePasswordForm(new Fieldset([], []));
     }
@@ -85,7 +86,7 @@ class ChangePasswordController extends WardenBaseController
         $this->respondPageContent($this->form_view);
     }
 
-    public function action_post()
+    public function action_post(): void
     {
         $values = [
             'user'             => $this->session->getUser(),
@@ -118,7 +119,7 @@ class ChangePasswordController extends WardenBaseController
                 new Fieldset($this->request->post(), $result->getValidationErrors())
             );
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Unexpected password change failure: '.$result->getFailureCode()
             );
         }

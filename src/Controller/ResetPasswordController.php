@@ -7,6 +7,7 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
 use Ingenerator\Warden\Core\Interactor\PasswordResetInteractor;
 use Ingenerator\Warden\Core\Interactor\PasswordResetRequest;
 use Ingenerator\Warden\Core\Interactor\PasswordResetResponse;
@@ -54,13 +55,13 @@ class ResetPasswordController extends WardenBaseController
         $this->session          = $session;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         $this->redirectHomeIfLoggedIn($this->session, $this->urls);
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $token_state = $this->reset_interactor->validateToken($this->makePasswordResetRequest());
         if ( ! $token_state->isValid()) {
@@ -78,7 +79,7 @@ class ResetPasswordController extends WardenBaseController
         $this->respondPageContent($this->reset_view);
     }
 
-    public function action_post()
+    public function action_post(): void
     {
         $result = $this->reset_interactor->execute($this->makePasswordResetRequest());
 
@@ -119,7 +120,7 @@ class ResetPasswordController extends WardenBaseController
             );
 
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Unexpected registration failure: '.$result->getFailureCode()
             );
         }

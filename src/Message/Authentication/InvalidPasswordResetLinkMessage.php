@@ -7,9 +7,10 @@
 namespace Ingenerator\Warden\UI\Kohana\Message\Authentication;
 
 
+use Ingenerator\Pigeonhole\Message\KohanaMessage;
 use Ingenerator\Pigeonhole\Message;
 
-class InvalidPasswordResetLinkMessage extends Message\KohanaMessage
+class InvalidPasswordResetLinkMessage extends KohanaMessage
 {
     public function __construct()
     {

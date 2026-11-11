@@ -7,6 +7,8 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
+use DateTime;
 use Ingenerator\Warden\Core\Interactor\LoginInteractor;
 use Ingenerator\Warden\Core\Interactor\LoginResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
@@ -29,7 +31,7 @@ class LoginController extends WardenBaseController
     protected $interactor;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -64,13 +66,13 @@ class LoginController extends WardenBaseController
         $this->user_session = $user_session;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         $this->redirectHomeIfLoggedIn($this->user_session, $this->urls);
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $this->displayLoginForm(new Fieldset(['email' => $this->request->query('email')], []));
     }
@@ -81,7 +83,7 @@ class LoginController extends WardenBaseController
         $this->respondPageContent($this->login_view);
     }
 
-    public function action_post()
+    public function action_post(): void
     {
         $result = $this->interactor->execute(
             $this->makeInteractorRequest('login', 'fromArray', $this->request->post())
@@ -136,7 +138,7 @@ class LoginController extends WardenBaseController
                 break;
 
             default:
-                throw new \UnexpectedValueException(
+                throw new UnexpectedValueException(
                     'Unexpected login failure: '.$result->getFailureCode()
                 );
         }
@@ -183,7 +185,7 @@ class LoginController extends WardenBaseController
                 'Skipped sending %s to %s (rate limit will clear %s)',
                 $type,
                 $result->getEmail(),
-                $result->canRetryAfter()->format(\DateTime::ATOM)
+                $result->canRetryAfter()->format(DateTime::ATOM)
             )
         );
     }
@@ -201,7 +203,7 @@ class LoginController extends WardenBaseController
             \sprintf(
                 'Login denied - rate limited (%s) - will reset %s',
                 $result->getFailureDetail(),
-                $result->canRetryAfter()->format(\DateTime::ATOM)
+                $result->canRetryAfter()->format(DateTime::ATOM)
             )
         );
         $this->displayLoginForm(new Fieldset($this->request->post(), []));

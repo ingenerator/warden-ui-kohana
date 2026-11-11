@@ -7,6 +7,8 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
+use DateTime;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationResponse;
@@ -37,12 +39,12 @@ class ChangeEmailController extends WardenBaseController
     protected $urls;
 
     /**
-     * @var \Ingenerator\Warden\UI\Kohana\View\ChangeEmailView
+     * @var ChangeEmailView
      */
     protected $form_view;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -62,7 +64,7 @@ class ChangeEmailController extends WardenBaseController
         $this->logger           = $logger;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         if ( ! $this->session->isAuthenticated()) {
@@ -75,7 +77,7 @@ class ChangeEmailController extends WardenBaseController
         return $this->session->getUser();
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $this->displayEmailVerificationForm(new Fieldset([], []));
     }
@@ -91,7 +93,7 @@ class ChangeEmailController extends WardenBaseController
         $this->respondPageContent($this->form_view);
     }
 
-    public function action_post()
+    public function action_post(): void
     {
         $result = $this->email_interactor->execute(
             EmailVerificationRequest::forChangeEmail(
@@ -127,7 +129,7 @@ class ChangeEmailController extends WardenBaseController
                 new Fieldset($this->request->post(), $result->getValidationErrors())
             );
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Unexpected email verification failure: '.$result->getFailureCode()
             );
         }
@@ -140,7 +142,7 @@ class ChangeEmailController extends WardenBaseController
             \sprintf(
                 'Skipped sending change-email to %s (rate limit will clear %s)',
                 $result->getEmail(),
-                $result->canRetryAfter()->format(\DateTime::ATOM)
+                $result->canRetryAfter()->format(DateTime::ATOM)
             )
         );
         $this->handleEmailVerificationSent($result);

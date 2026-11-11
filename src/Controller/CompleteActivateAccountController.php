@@ -7,6 +7,8 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
+use Psr\Log\LoggerInterface;
 use Ingenerator\Warden\Core\Interactor\ActivateAccountInteractor;
 use Ingenerator\Warden\Core\Interactor\ActivateAccountResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
@@ -18,7 +20,7 @@ use Ingenerator\Warden\UI\Kohana\Message\Register\InvalidActivationLinkMessage;
 class CompleteActivateAccountController extends WardenBaseController
 {
     /**
-     * @var \Ingenerator\Warden\Core\Interactor\ActivateAccountInteractor
+     * @var ActivateAccountInteractor
      */
     protected $interactor;
 
@@ -33,7 +35,7 @@ class CompleteActivateAccountController extends WardenBaseController
     protected $urls;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -49,7 +51,7 @@ class CompleteActivateAccountController extends WardenBaseController
         $this->interactor = $interactor;
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $values = [
             'user_id' => $this->request->query('user_id'),
@@ -79,7 +81,7 @@ class CompleteActivateAccountController extends WardenBaseController
             $this->getPigeonhole()->add(new InvalidActivationLinkMessage);
             $this->redirect($this->urls->getLoginUrl());
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Unexpected activation failure: '.$result->getFailureCode()
             );
         }

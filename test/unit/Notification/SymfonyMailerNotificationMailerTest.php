@@ -1,12 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
-
 namespace test\unit\Ingenerator\Warden\UI\Kohana\Notification;
 
 
+use URL;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationRequest;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
@@ -24,43 +27,46 @@ use Symfony\Component\Mime\RawMessage;
 use function json_decode;
 use function json_encode;
 
-class SymfonyMailerNotificationMailerTest extends TestCase
+final class SymfonyMailerNotificationMailerTest extends TestCase
 {
-    protected array $config = [
+    /**
+     * @var array<string, string>
+     */
+    private array $config = [
         'email_sender'      => 'foo@warden.test',
         'email_sender_name' => 'Warden Emailer',
     ];
 
-    protected SpyingSymfonyMailer $mailer;
+    private SpyingSymfonyMailer $mailer;
 
     /**
      * @var JsonKohanaMessaageProviderStub
      */
-    protected $messages;
+    private JsonKohanaMessaageProviderStub $messages;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(SymfonyMailerNotificationMailer::class, $subject);
         $this->assertInstanceOf(UserNotificationMailer::class, $subject);
     }
 
-    public function test_it_throws_on_unsupported_notification_type()
+    public function test_it_throws_on_unsupported_notification_type(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->newSubject()->sendWardenNotification(
-            $this->getMockBuilder(UserNotification::class)->disableOriginalConstructor()->getMock()
+            $this->createStub(UserNotification::class)
         );
     }
 
-    public function test_it_sends_email_to_notification_recipient()
+    public function test_it_sends_email_to_notification_recipient(): void
     {
         $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.test']);
         $mail = $this->mailer->assertSentOne();
         $this->assertEquals([new Address('foo@bar.test', '')], $mail->getTo());
     }
 
-    public function test_it_sends_email_from_configured_sender()
+    public function test_it_sends_email_from_configured_sender(): void
     {
         $this->config = [
             'email_sender'      => 'warden-sendWardenNotification@mail.test',
@@ -71,7 +77,7 @@ class SymfonyMailerNotificationMailerTest extends TestCase
         $this->assertEquals([new Address('warden-sendWardenNotification@mail.test', 'Mail Warden')], $mail->getFrom());
     }
 
-    public function test_it_sets_subject_from_message_provider_for_notification()
+    public function test_it_sets_subject_from_message_provider_for_notification(): void
     {
         $this->sendConfirmationRequiredWith(['recipient' => 'foo@bar.test']);
         $mail = $this->mailer->assertSentOne();
@@ -83,12 +89,12 @@ class SymfonyMailerNotificationMailerTest extends TestCase
         );
     }
 
-    public function test_it_provides_notification_details_and_messages_to_view_model()
+    public function test_it_provides_notification_details_and_messages_to_view_model(): void
     {
         $this->markTestIncomplete('Support branded user notification emails');
     }
 
-    public function test_it_renders_message_as_first_part_of_text_content()
+    public function test_it_renders_message_as_first_part_of_text_content(): void
     {
         $this->sendConfirmationRequiredWith(['continuation_url' => '/reset?foo=blah']);
         $mail    = $this->mailer->assertSentOne();
@@ -98,7 +104,7 @@ class SymfonyMailerNotificationMailerTest extends TestCase
             'user_notification_mail',
             'confirm_required.register.message',
             [
-                '%continuation_url%' => \URL::site('/reset?foo=blah', TRUE),
+                '%continuation_url%' => URL::site('/reset?foo=blah', TRUE),
             ],
             \strtok($message, \PHP_EOL)
         );
@@ -114,7 +120,7 @@ class SymfonyMailerNotificationMailerTest extends TestCase
     /**
      * @param $values
      */
-    protected function sendConfirmationRequiredWith($values)
+    protected function sendConfirmationRequiredWith($values): void
     {
         $values       = \array_merge(
             [
@@ -187,7 +193,7 @@ class JsonKohanaMessaageProviderStub extends KohanaMessageProvider
         );
     }
 
-    public function assertIsMessage($file, $path, array $params, $string)
+    public function assertIsMessage($file, $path, array $params, $string): void
     {
         $values = json_decode($string, TRUE);
         Assert::assertEquals(

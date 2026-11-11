@@ -80,17 +80,11 @@ class WardenUserLogMetadataProvider implements LogMetadataProvider
 
     protected function canAccessSession(): bool
     {
-        switch ($this->sessionStatus()) {
-            case PHP_SESSION_ACTIVE:
-                return TRUE;
-
-            case PHP_SESSION_DISABLED:
-                return FALSE;
-
-            case PHP_SESSION_NONE:
-            default:
-                return ! $this->headersSent();
-        }
+        return match ($this->sessionStatus()) {
+            PHP_SESSION_ACTIVE => TRUE,
+            PHP_SESSION_DISABLED => FALSE,
+            default => ! $this->headersSent(),
+        };
     }
 
     protected function sessionStatus(): int

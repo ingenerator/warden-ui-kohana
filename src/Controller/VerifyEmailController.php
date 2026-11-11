@@ -7,6 +7,8 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use UnexpectedValueException;
+use DateTime;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationInteractor;
 use Ingenerator\Warden\Core\Interactor\EmailVerificationResponse;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
@@ -40,7 +42,7 @@ class VerifyEmailController extends WardenBaseController
     protected $verify_view;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -60,13 +62,13 @@ class VerifyEmailController extends WardenBaseController
         $this->logger           = $logger;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         $this->redirectHomeIfLoggedIn($this->session, $this->urls);
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $this->displayEmailVerificationForm(new Fieldset(['email' => $this->request->query('email')], []));
     }
@@ -77,7 +79,7 @@ class VerifyEmailController extends WardenBaseController
         $this->respondPageContent($this->verify_view);
     }
 
-    public function action_post()
+    public function action_post(): void
     {
         $result = $this->email_interactor->execute(
             $this->makeInteractorRequest(
@@ -109,7 +111,7 @@ class VerifyEmailController extends WardenBaseController
         } elseif ($result->isFailureCode(EmailVerificationResponse::ERROR_DETAILS_INVALID)) {
             $this->displayEmailVerificationForm(new Fieldset($this->request->post(), $result->getValidationErrors()));
         } else {
-            throw new \UnexpectedValueException('Unexpected email verification failure: '.$result->getFailureCode());
+            throw new UnexpectedValueException('Unexpected email verification failure: '.$result->getFailureCode());
         }
     }
 
@@ -120,7 +122,7 @@ class VerifyEmailController extends WardenBaseController
             \sprintf(
                 'Skipped sending verification to %s (rate limit will clear %s)',
                 $result->getEmail(),
-                $result->canRetryAfter()->format(\DateTime::ATOM)
+                $result->canRetryAfter()->format(DateTime::ATOM)
             )
         );
         $this->handleEmailVerificationSent($result);

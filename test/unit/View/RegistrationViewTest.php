@@ -1,32 +1,41 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
-
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
+use Iterator;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\Warden\UI\Kohana\Form\Fieldset;
 use Ingenerator\Warden\UI\Kohana\View\RegistrationView;
+use PHPUnit\Framework\Attributes\DataProvider;
 use test\mock\View\DummyPageLayoutView;
 
-class RegistrationViewTest extends AbstractFormViewTest
+final class RegistrationViewTest extends AbstractFormViewTestCase
 {
 
-    public function test_it_is_initialisable()
+    /**
+     * @return Iterator<int, mixed[]>
+     */
+    public static function dataProvider_it_makes_email_readonly_if_confirmation_token_is_provided(): Iterator
+    {
+        yield ["122412323", "readonly"];
+        yield ["", ""];
+    }
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\RegistrationView', $subject);
+        $this->assertInstanceOf(RegistrationView::class, $subject);
         $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
-    /**
-     * @testWith ["122412323", "readonly"]
-     *           ["", ""]
-     */
-    public function test_it_makes_email_readonly_if_confirmation_token_is_provided($token, $expect_readonly)
+    #[DataProvider('dataProvider_it_makes_email_readonly_if_confirmation_token_is_provided')]
+    public function test_it_makes_email_readonly_if_confirmation_token_is_provided(string $token, string $expect_readonly): void
     {
         $subject = $this->newSubject();
         $subject->display(
@@ -42,7 +51,7 @@ class RegistrationViewTest extends AbstractFormViewTest
         $this->assertSame($expect_readonly, $subject->is_email_readonly);
     }
 
-    protected function newSubject()
+    protected function newSubject(): RegistrationView
     {
         return new RegistrationView(new DummyPageLayoutView);
     }

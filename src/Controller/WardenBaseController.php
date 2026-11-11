@@ -7,13 +7,14 @@
 namespace Ingenerator\Warden\UI\Kohana\Controller;
 
 
+use Controller;
 use Ingenerator\Pigeonhole\Pigeonhole;
 use Ingenerator\Warden\Core\Support\InteractorRequestFactory;
 use Ingenerator\Warden\Core\Support\UrlProvider;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Message\Register\ExistingUserRegistrationMessage;
 
-abstract class WardenBaseController extends \Controller
+abstract class WardenBaseController extends Controller
 {
 
     /**

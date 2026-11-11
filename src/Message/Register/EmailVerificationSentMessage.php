@@ -7,9 +7,10 @@
 namespace Ingenerator\Warden\UI\Kohana\Message\Register;
 
 
+use Ingenerator\Pigeonhole\Message\KohanaMessage;
 use Ingenerator\Pigeonhole\Message;
 
-class EmailVerificationSentMessage extends Message\KohanaMessage
+class EmailVerificationSentMessage extends KohanaMessage
 {
     public function __construct($email)
     {

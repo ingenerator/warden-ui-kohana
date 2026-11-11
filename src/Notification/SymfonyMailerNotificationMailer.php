@@ -8,6 +8,8 @@
 namespace Ingenerator\Warden\UI\Kohana\Notification;
 
 
+use InvalidArgumentException;
+use URL;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\Warden\Core\Notification\ConfirmationRequiredNotification;
 use Ingenerator\Warden\Core\Notification\UserNotification;
@@ -37,7 +39,7 @@ class SymfonyMailerNotificationMailer implements UserNotificationMailer
         if ($notification instanceof ConfirmationRequiredNotification) {
             $this->sendConfirmationRequired($notification);
         } else {
-            throw new \InvalidArgumentException('Unsupported notification type '.\get_class($notification));
+            throw new InvalidArgumentException('Unsupported notification type '.$notification::class);
         }
     }
 
@@ -54,7 +56,7 @@ class SymfonyMailerNotificationMailer implements UserNotificationMailer
             $this->messages->message(
                 self::MESSAGE_FILE,
                 $base_path . '.message',
-                ['%continuation_url%' => \URL::site($notification->getContinuationUrl(), TRUE)]
+                ['%continuation_url%' => URL::site($notification->getContinuationUrl(), TRUE)]
             )
         );
 
