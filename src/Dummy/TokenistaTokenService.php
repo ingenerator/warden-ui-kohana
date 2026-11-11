@@ -5,6 +5,7 @@
  */
 namespace Ingenerator\Warden\UI\Kohana\Dummy;
 
+use Date;
 use Ingenerator\Tokenista;
 use Ingenerator\Warden\Core\Support\EmailConfirmationTokenService;
 
@@ -22,7 +23,7 @@ class TokenistaTokenService implements EmailConfirmationTokenService
 
     public function createToken($params)
     {
-        return $this->tokenista->generate(\Date::DAY * 5, $params);
+        return $this->tokenista->generate(Date::DAY * 5, $params);
     }
 
     public function isValid($token, $params)

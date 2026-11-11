@@ -42,7 +42,7 @@ class ProfileController extends WardenBaseController
         $this->urls         = $urls;
     }
 
-    public function before()
+    public function before(): void
     {
         parent::before();
         if ( ! $this->session->isAuthenticated()) {
@@ -50,7 +50,7 @@ class ProfileController extends WardenBaseController
         }
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         $this->profile_view->display(['user' => $this->session->getUser()]);
 

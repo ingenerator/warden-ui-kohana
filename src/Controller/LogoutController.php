@@ -32,7 +32,7 @@ class LogoutController extends WardenBaseController
         $this->urls    = $urls;
     }
 
-    public function action_get()
+    public function action_get(): void
     {
         if ($this->session->isAuthenticated()) {
             $this->session->logout();

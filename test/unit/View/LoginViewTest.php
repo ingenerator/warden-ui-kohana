@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
-
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
@@ -12,17 +14,17 @@ use Ingenerator\Warden\Core\Support\FixedUrlProviderStub;
 use Ingenerator\Warden\UI\Kohana\View\LoginView;
 use test\mock\View\DummyPageLayoutView;
 
-class LoginViewTest extends AbstractFormViewTest
+final class LoginViewTest extends AbstractFormViewTestCase
 {
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf('Ingenerator\Warden\UI\Kohana\View\LoginView', $subject);
+        $this->assertInstanceOf(LoginView::class, $subject);
         $this->assertInstanceOf(NestedChildView::class, $subject);
     }
     
-    protected function newSubject()
+    protected function newSubject(): LoginView
     {
         return new LoginView(new DummyPageLayoutView, new FixedUrlProviderStub());
     }

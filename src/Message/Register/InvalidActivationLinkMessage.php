@@ -7,9 +7,10 @@
 namespace Ingenerator\Warden\UI\Kohana\Message\Register;
 
 
+use Ingenerator\Pigeonhole\Message\KohanaMessage;
 use Ingenerator\Pigeonhole\Message;
 
-class InvalidActivationLinkMessage extends Message\KohanaMessage
+class InvalidActivationLinkMessage extends KohanaMessage
 {
     public function __construct()
     {

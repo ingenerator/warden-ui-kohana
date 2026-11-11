@@ -6,7 +6,7 @@ use Composer\Autoload\ClassLoader;
 
 // Set up temporary directories for the app
 // These need to exist and be writable, though we do very little with them
-(function () {
+(function (): void {
     $mkdir = function (string $dir): string {
         if ( ! mkdir($dir, recursive: TRUE)) {
             throw new RuntimeException('Could not create temporary directory in '.$dir);
@@ -55,7 +55,7 @@ Kohana::modules(
     ]
 );
 
-\Kohana::$config->load('url')->set('trusted_hosts', [$_SERVER['HTTP_HOST']]);
+Kohana::$config->load('url')->set('trusted_hosts', [$_SERVER['HTTP_HOST']]);
 
 // Autoload mocks and test-support helpers that should not autoload in the main app
 $mock_loader = new ClassLoader;

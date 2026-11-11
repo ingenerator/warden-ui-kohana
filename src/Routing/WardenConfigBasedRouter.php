@@ -7,6 +7,9 @@
 namespace Ingenerator\Warden\UI\Kohana\Routing;
 
 
+use OutOfBoundsException;
+use URL;
+use InvalidArgumentException;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
 use Ingenerator\Warden\Core\Entity\User;
 use Ingenerator\Warden\Core\Support\UrlProvider;
@@ -122,22 +125,21 @@ class WardenConfigBasedRouter implements UrlProvider
         if ( ! isset($this->url_config[$key]['url'])) {
             // You need to define this key if you're using this URL, or extend this class to send the
             // user somewhere useful if this happens.
-            throw new \OutOfBoundsException('Unexpected access to empty URL `'.$key.'`');
+            throw new OutOfBoundsException('Unexpected access to empty URL `'.$key.'`');
         }
 
-        $base_url = \URL::site($this->url_config[$key]['url']);
-        if ($params) {
+        $base_url = URL::site($this->url_config[$key]['url']);
+        if ($params !== []) {
             return $base_url.'?'.\http_build_query($params);
-        } else {
-            return $base_url;
         }
+        return $base_url;
 
     }
 
     /**
      * Defines routes for all the URLs that are defined in config
      */
-    public function registerGlobalRoutes()
+    public function registerGlobalRoutes(): void
     {
         foreach ($this->url_config as $key => $config) {
             if ($config['route_controller'] === FALSE) {
@@ -145,7 +147,7 @@ class WardenConfigBasedRouter implements UrlProvider
             }
 
             if ( ! $config['url']) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Cannot define route `'.$key.'` to controller `'.$config['route_controller'].'` with no URL'
                 );
             }

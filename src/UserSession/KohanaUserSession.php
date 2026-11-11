@@ -6,6 +6,8 @@
 
 namespace Ingenerator\Warden\UI\Kohana\UserSession;
 
+use Session;
+use DateTimeImmutable;
 use Ingenerator\Warden\Core\Entity\User;
 use Ingenerator\Warden\Core\Repository\UnknownUserException;
 use Ingenerator\Warden\Core\Repository\UserRepository;
@@ -24,7 +26,7 @@ class KohanaUserSession extends SimplePropertyUserSession
      */
     protected $user_repository;
 
-    public function __construct(\Session $session_driver, UserRepository $user_repository)
+    public function __construct(Session $session_driver, UserRepository $user_repository)
     {
         $this->session_driver  = $session_driver;
         $this->user_repository = $user_repository;
@@ -33,14 +35,14 @@ class KohanaUserSession extends SimplePropertyUserSession
     /**
      * {@inheritdoc}
      */
-    public function login(User $user)
+    public function login(User $user): void
     {
         parent::login($user);
         $this->session_driver->regenerate();
         $this->session_driver->set('user_id', $user->getId());
 
         if ($user instanceof LastLoginTrackingUser) {
-            $user->markLoggedInAt(new \DateTimeImmutable);
+            $user->markLoggedInAt(new DateTimeImmutable);
             $this->user_repository->save($user);
         }
     }
@@ -48,7 +50,7 @@ class KohanaUserSession extends SimplePropertyUserSession
     /**
      * {@inheritdoc}
      */
-    public function logout()
+    public function logout(): void
     {
         parent::logout();
         $this->session_driver->delete('user_id');

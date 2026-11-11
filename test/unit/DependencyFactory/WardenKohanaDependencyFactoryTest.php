@@ -1,14 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
-
 namespace test\unit\Ingenerator\Warden\UI\Kohana\DependencyFactory;
 
 
+use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use PSR\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Session;
 use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Doctrine\ORM\EntityManager;
@@ -30,10 +34,13 @@ use InvalidArgumentException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class WardenKohanaDependencyFactoryTest extends TestCase
+final class WardenKohanaDependencyFactoryTest extends TestCase
 {
 
-    public function provider_service_names()
+    /**
+     * @return array{mixed}[]
+     */
+    public static function provider_service_names(): array
     {
         $container = new DependencyContainer(
             [
@@ -51,10 +58,8 @@ class WardenKohanaDependencyFactoryTest extends TestCase
         return $services;
     }
 
-    /**
-     * @dataProvider provider_service_names
-     */
-    public function test_all_service_definitions_are_valid($service_name)
+    #[DataProvider('provider_service_names')]
+    public function test_all_service_definitions_are_valid($service_name): void
     {
         $container = new DependencyContainer(
             [
@@ -67,7 +72,7 @@ class WardenKohanaDependencyFactoryTest extends TestCase
                             'kohana.message_provider' => KohanaMessageProvider::class,
                             'kohana.psr_log'          => LoggerInterface::class,
                             'kohana.session'          => Session::class,
-                            'symfonymailer.mailer'      => MailerInterface::class,
+                            'symfonymailer.mailer'    => MailerInterface::class,
                             'tokenista.tokenista'     => Tokenista::class,
                             'validation.validator'    => ValidatorInterface::class,
                             'view.layout.default'     => NestedParentView::class,
@@ -80,7 +85,7 @@ class WardenKohanaDependencyFactoryTest extends TestCase
         $this->assertNotNull($container->get($service_name));
     }
 
-    public function provider_controller_subsets()
+    public static function provider_controller_subsets(): Iterator
     {
         $all_controllers = [
             '\\'.ChangeEmailController::class,
@@ -94,56 +99,55 @@ class WardenKohanaDependencyFactoryTest extends TestCase
             '\\'.ResetPasswordController::class,
             '\\'.VerifyEmailController::class,
         ];
-
-        return [
+        yield [
+            [],
+            $all_controllers,
+        ];
+        yield [
+            ['only_controllers' => NULL],
+            $all_controllers,
+        ];
+        yield [
+            ['only_controllers' => []],
+            [],
+        ];
+        yield [
+            ['only_controllers' => [LoginController::class]],
+            ['\\'.LoginController::class],
+        ];
+        yield [
+            ['only_controllers' => [LoginController::class, RegisterController::class]],
+            ['\\'.LoginController::class, '\\'.RegisterController::class],
+        ];
+        yield [
             [
-                [],
-                $all_controllers,
+                'only_controllers' => [LoginController::class, RegisterController::class],
+                'not_controllers' => [],
             ],
-            [
-                ['only_controllers' => NULL],
-                $all_controllers,
-            ],
-            [
-                ['only_controllers' => []],
-                [],
-            ],
-            [
-                ['only_controllers' => [LoginController::class]],
-                ['\\'.LoginController::class],
-            ],
-            [
-                ['only_controllers' => [LoginController::class, RegisterController::class]],
-                ['\\'.LoginController::class, '\\'.RegisterController::class],
-            ],
-            [
-                [
-                    'only_controllers' => [LoginController::class, RegisterController::class],
-                    'not_controllers' => [],
-                ],
-                ['\\'.LoginController::class, '\\'.RegisterController::class],
-            ],
-            [
-                ['not_controllers' => [LoginController::class]],
+            ['\\'.LoginController::class, '\\'.RegisterController::class],
+        ];
+        yield [
+            ['not_controllers' => [LoginController::class]],
+            array_values(
                 array_filter(
                     $all_controllers,
-                    fn($c) => $c !== '\\'.LoginController::class
-                ),
-            ],
-            [
-                ['not_controllers' => [LoginController::class, RegisterController::class]],
+                    fn(string $c): bool => $c !== '\\'.LoginController::class
+                )
+            ),
+        ];
+        yield [
+            ['not_controllers' => [LoginController::class, RegisterController::class]],
+            array_values(
                 array_filter(
                     $all_controllers,
-                    fn($c) => $c !== '\\'.LoginController::class && $c !== '\\'.RegisterController::class
-                ),
-            ],
+                    fn(string $c): bool => $c !== '\\'.LoginController::class && $c !== '\\'.RegisterController::class
+                )
+            ),
         ];
     }
 
-    /**
-     * @dataProvider  provider_controller_subsets
-     */
-    public function test_it_optionally_allows_to_define_a_subset_of_controllers($args, $expect_has)
+    #[DataProvider('provider_controller_subsets')]
+    public function test_it_optionally_allows_to_define_a_subset_of_controllers(array $args, array $expect_has): void
     {
         $definitions = WardenKohanaDependencyFactory::controllerDefinitions(...$args);
 
@@ -156,57 +160,53 @@ class WardenKohanaDependencyFactoryTest extends TestCase
         $this->assertEqualsCanonicalizing($expect_has, $actual_has);
     }
 
-    public static function provider_invalid_controller_subsets()
+    public static function provider_invalid_controller_subsets(): Iterator
     {
-        return [
-            'empty allow with a blacklist' => [
-                ['only_controllers' => [], 'not_controllers' => [LoginController::class]],
-            ],
-            'any allow with a blacklist' => [
-                ['only_controllers' => [LoginController::class], 'not_controllers' => [RegisterController::class]],
-            ],
-            'unknown only_controller' => [
-                ['only_controllers' => ['foobar']],
-            ],
-            'unknown not_controller' => [
-                ['not_controllers' => ['foobar']],
-            ],
+        yield 'empty allow with a blacklist' => [
+            ['only_controllers' => [], 'not_controllers' => [LoginController::class]],
+        ];
+        yield 'any allow with a blacklist' => [
+            ['only_controllers' => [LoginController::class], 'not_controllers' => [RegisterController::class]],
+        ];
+        yield 'unknown only_controller' => [
+            ['only_controllers' => ['foobar']],
+        ];
+        yield 'unknown not_controller' => [
+            ['not_controllers' => ['foobar']],
         ];
     }
 
-    /**
-     * @dataProvider provider_invalid_controller_subsets
-     */
-    public function test_it_throws_on_invalid_combination_of_white_and_blacklist_controllers(array $args)
+    #[DataProvider('provider_invalid_controller_subsets')]
+    public function test_it_throws_on_invalid_combination_of_white_and_blacklist_controllers(array $args): void
     {
         $this->expectException(InvalidArgumentException::class);
         WardenKohanaDependencyFactory::controllerDefinitions(...$args);
     }
 
-    protected function dummy_dependencies(array $dependencies)
+    protected function dummy_dependencies(array $dependencies): array
     {
-        $definitions = [];
-        foreach ($dependencies as $key => $class_or_interface) {
-            $definitions[$key] = [
-                '_settings' => [
-                    'class' => $this->make_dummy_mock_class($class_or_interface),
-                ],
-            ];
-        }
-
-        return $definitions;
+        return array_map(
+            function ($class_or_interface) {
+                return [
+                    '_settings' => [
+                        'class' => $this->make_dummy_mock_class($class_or_interface),
+                    ],
+                ];
+            },
+            $dependencies
+        );
     }
 
     protected function make_dummy_mock_class($class_or_interface)
     {
         $dummy_name = 'DummyDependency_'.\str_replace('\\', '_', $class_or_interface);
         if ( ! \class_exists($dummy_name)) {
-            $this->getMockBuilder($class_or_interface)
-                ->setMockClassName($dummy_name.'Raw')
+            $this->getStubBuilder($class_or_interface)
+                ->setStubClassName($dummy_name.'Raw')
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getStub();
 
-            // Ouch. This appears to be the simplest way to use phpunit's mocking but splat the constructor
+            // Ouch. This appears to be the simplest way to use phpunit's stubbing but splat the constructor
             // Which is required when the class we're mocking has either a private constructor or a set
             // of required arguments
             eval('class '.$dummy_name.' extends '.$dummy_name.'Raw { public function __construct() {} }');

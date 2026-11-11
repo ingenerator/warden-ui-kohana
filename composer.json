@@ -28,8 +28,8 @@
     "symfony/mailer": "^7.2"
   },
   "require-dev": {
-    "johnkary/phpunit-speedtrap": "^3.3",
-    "phpunit/phpunit": "^9.6.23"
+    "ergebnis/phpunit-slow-test-detector": "^2.15",
+    "phpunit/phpunit": "13.4"
   },
   "conflict": {
     "egulias/email-validator": "<3.2.1"
