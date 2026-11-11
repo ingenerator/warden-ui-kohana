@@ -10,7 +10,7 @@ use Ingenerator\Warden\Core\UserSession\SimplePropertyUserSession;
 use Ingenerator\Warden\Core\UserSession\UserSession;
 use Ingenerator\Warden\UI\Kohana\Logging\WardenUserLogMetadataProvider;
 use PHPUnit\Framework\TestCase;
-use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
+use test\mock\Entity\UserStub;
 
 class WardenUserLogMetadataProviderTest extends TestCase
 {

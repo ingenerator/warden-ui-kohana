@@ -12,8 +12,8 @@ use Ingenerator\Warden\Core\Repository\UnknownUserException;
 use Ingenerator\Warden\Core\Repository\UserRepository;
 use Ingenerator\Warden\UI\Kohana\Entity\LastLoginTrackingUser;
 use Ingenerator\Warden\UI\Kohana\UserSession\KohanaUserSession;
-use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
-use test\unit\Ingenerator\Warden\Core\UserSession\UserSessionTestCase;
+use test\mock\Entity\UserStub;
+
 
 class KohanaUserSessionTest extends UserSessionTestCase
 {

@@ -6,9 +6,6 @@ require_once __DIR__.'/../koharness_bootstrap.php';
 
 \Kohana::$config->load('url')->set('trusted_hosts', [$_SERVER['HTTP_HOST']]);
 
-// Require in warden core test bootstrap to autoload mocks and base tests
-require_once __DIR__.'/../vendor/ingenerator/warden-core/test/bootstrap.php';
-
 // Autoload mocks and test-support helpers that should not autoload in the main app
 $mock_loader = new \Composer\Autoload\ClassLoader;
 $mock_loader->addPsr4('test\\mock\\', [__DIR__.'/mock/']);

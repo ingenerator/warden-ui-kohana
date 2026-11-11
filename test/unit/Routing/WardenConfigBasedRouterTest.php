@@ -13,7 +13,7 @@ use Ingenerator\Warden\UI\Kohana\Routing\WardenConfigBasedRouter;
 use InvalidArgumentException;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-use test\mock\Ingenerator\Warden\Core\Entity\UserStub;
+use test\mock\Entity\UserStub;
 
 class WardenConfigBasedRouterTest extends TestCase
 {
