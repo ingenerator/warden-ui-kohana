@@ -1,5 +1,10 @@
 ### Unreleased
 
+### v4.0.0 (2026-11-18)
+* Support PHP 8.5 and PHP 8.6
+* Drop support for PHP 8.2 and PHP 8.3
+
+
 ### v4.0.0-alpha2 (2025-11-04)
 
 * Fix version specification for ingenerator/kohana-view ^5.0@alpha

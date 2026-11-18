@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
-
 namespace test\unit\Ingenerator\Warden\UI\Kohana\View;
 
 
@@ -13,16 +15,16 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use function array_merge;
 
-abstract class AbstractFormViewTest extends TestCase
+abstract class AbstractFormViewTestCase extends TestCase
 {
 
-    public function test_it_throws_if_fields_is_not_a_fieldset()
+    public function test_it_throws_if_fields_is_not_a_fieldset(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->newSubjectDisplaying(['fields' => 'random stuff']);
     }
 
-    public function test_it_exposes_fields_variable()
+    public function test_it_exposes_fields_variable(): void
     {
         $fields  = new Fieldset([], []);
         $subject = $this->newSubjectDisplaying(['fields' => $fields]);
