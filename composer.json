@@ -22,6 +22,7 @@
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/kohana-extras": "^4.0",
     "ingenerator/kohana-view": "^5.0",
+    "ingenerator/pigeonhole": "^1.5",
     "ingenerator/tokenista": "^1.4",
     "ingenerator/warden-core": "^2.1.1",
     "ingenerator/warden-persistence-doctrine": "^2.0",
